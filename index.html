@@ -122,6 +122,9 @@
   .distro-btn .em { font-size: 1.5rem; }
   .distro-btn .nm { font-size: .82rem; font-weight: 800; margin-top: 6px; color: #fff; }
   .distro-btn .rl { font-size: .68rem; color: var(--text2); margin-top: 2px; }
+  .distro-chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 8px; }
+  .dchip { font-size: .72rem; font-weight: 700; padding: 6px 11px; border-radius: 14px; background: var(--card); border: 1px solid var(--border); color: var(--text2); }
+  .dchip.on { color: var(--green); border-color: var(--green); background: rgba(0,229,255,.10); box-shadow: 0 0 10px rgba(0,229,255,.25); }
 
   footer { text-align: center; padding: 24px 16px; color: var(--text2); font-size: .78rem; border-top: 1px solid var(--border); margin-top: 30px; }
   footer b { color: var(--green); }
@@ -334,10 +337,18 @@
     <div class="distro-btn" data-d="windows" onclick="pickDistro('windows', this)"><div class="em">🪟</div><div class="nm">Windows</div><div class="rl">Winlator / Nuvem</div></div>
   </div>
 
-  <div id="distro-panels"></div>
+  <div class="distro-chips">
+    <span class="dchip">🟠 Ubuntu</span>
+    <span class="dchip">🔴 Debian</span>
+    <span class="dchip">🐉 Kali Linux</span>
+    <span class="dchip on">🖱️ XFCE4</span>
+    <span class="dchip">🎩 Fedora</span>
+    <span class="dchip">🏔️ Alpine</span>
+    <span class="dchip">🌐 Outras distros</span>
+  </div>
 
-  <div class="sec-title" style="margin-top:24px;"><span class="bar"></span>Métodos disponíveis</div>
-  <div id="methods-list"></div>
+  <div class="sec-title" style="margin-top:22px;"><span class="bar"></span>Métodos disponíveis</div>
+  <div id="distro-panels"></div>
 
   <div class="alert alert-warn">⚠️ <strong>Aviso:</strong> Ferramentas aqui são para estudo e uso <strong>autorizado</strong>. Nunca ataque sistemas que não são seus. Rodar distros no seu próprio aparelho é totalmente legal.</div>
   </div><!-- /sub-simples -->
@@ -710,7 +721,7 @@ proot-distro install void</pre>
     `
   },
   vnc: {
-    ico: '🖱️', cls: 'mi-kali', name: 'Desktop via VNC (interface gráfica)', sub: 'Rode Ubuntu/XFCE4 com tela gráfica de verdade', lvl: 'Médio', lvlc: 'lvl-mid',
+    ico: '🖱️', cls: 'mi-kali', name: 'Desktop XFCE4 via VNC (interface gráfica)', sub: 'Rode Ubuntu/Debian com o desktop XFCE4 — tela gráfica de verdade', lvl: 'Médio', lvlc: 'lvl-mid',
     body: `
       <div class="cmd-block">1) Prepare o Termux e a distro</div>
       <div class="step"><div class="step-n">1</div><div class="step-t"><code>pkg install proot-distro</code></div></div>
@@ -736,7 +747,7 @@ vncserver
     `
   },
   x11: {
-    ico: '🪟', cls: 'mi-xfce', name: 'Termux:X11 (gráfico nativo)', sub: 'Mais rápido que VNC — X11 direto no Android', lvl: 'Médio', lvlc: 'lvl-mid',
+    ico: '🪟', cls: 'mi-xfce', name: 'Termux:X11 — XFCE4 gráfico nativo', sub: 'Mais rápido que VNC — X11 direto no Android', lvl: 'Médio', lvlc: 'lvl-mid',
     body: `
       <div class="cmd-block">1) Instale o app Termux:X11</div>
       <div class="step"><div class="step-n">1</div><div class="step-t">Baixe o <b>Termux:X11</b> no F-Droid (é um app separado do Termux).</div></div>
