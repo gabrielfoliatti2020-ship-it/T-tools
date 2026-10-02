@@ -176,6 +176,27 @@
   .splash-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--green), var(--cyan)); box-shadow: 0 0 12px var(--green); animation: load 3.2s ease forwards; }
   @keyframes load { to { width: 100%; } }
   .splash-skip { margin-top: 16px; font-size: .72rem; color: var(--text2); letter-spacing: .08em; animation: fadeUp 1s 1.2s both; }
+  /* ===== SUB-ABAS (Simples / Avançados) ===== */
+  .subtabs { display: flex; gap: 8px; margin: 16px 0 18px; }
+  .subtab { flex: 1; padding: 12px 10px; border-radius: 12px; background: var(--bg2); border: 1.5px solid var(--border); color: var(--text2); font-family: inherit; font-size: .84rem; font-weight: 700; cursor: pointer; transition: .2s; }
+  .subtab.active { background: linear-gradient(135deg, #06283d, #0a3a55); color: var(--green); border-color: var(--green); box-shadow: 0 0 14px rgba(0,229,255,.35); }
+
+  /* ===== GUIAS (Arch / Kernel) ===== */
+  .guide { display: flex; flex-direction: column; gap: 14px; margin-top: 6px; }
+  .guide-card { border: 1px solid var(--border); border-radius: 14px; background: var(--bg2); overflow: hidden; }
+  .guide-head { padding: 12px 14px; background: linear-gradient(135deg, #03141f, #062536); font-weight: 800; color: var(--green); font-size: .92rem; display: flex; gap: 8px; align-items: center; }
+  .guide-body { padding: 13px 14px; font-size: .87rem; line-height: 1.65; color: var(--text); }
+  .guide-body p { margin: 0 0 10px; }
+  .guide-body p:last-child { margin-bottom: 0; }
+  .guide-body code { display: block; background: #000; border: 1px solid var(--border); border-left: 3px solid var(--green); border-radius: 8px; padding: 9px 11px; margin: 6px 0; color: var(--cyan); font-size: .8rem; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .guide-body .lbl { display: block; color: var(--green); font-weight: 800; font-size: .74rem; text-transform: uppercase; letter-spacing: .6px; margin: 12px 0 2px; }
+  .guide-body .lbl:first-child { margin-top: 0; }
+  .guide-body strong { color: var(--green); }
+  .kernel-flow { display: flex; flex-direction: column; gap: 4px; margin: 12px 0; }
+  .kernel-layer { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; background: #03080d; text-align: center; font-size: .84rem; line-height: 1.5; }
+  .kernel-layer b { color: var(--green); }
+  .kernel-arrow { text-align: center; color: var(--green); font-size: 1rem; opacity: .8; }
+  .alert-info { border-color: var(--green); background: #02141d; color: var(--text); }
 </style>
 </head>
 <body>
@@ -213,6 +234,7 @@
   <div class="tabs">
     <button class="tab active" onclick="switchTab('emular', this)">🖥️ Rodar T-TOOL</button>
     <button class="tab" onclick="switchTab('comandos', this)">⌨️ Comandos</button>
+    <button class="tab" onclick="switchTab('kernel', this)">🧠 O que é Kernel</button>
   </div>
 </header>
 
@@ -222,16 +244,21 @@
 <section id="tab-emular">
   <div class="hero">
     <h1>🖥️ Transforme seu celular num computador</h1>
-    <p>Rode Kali, Ubuntu, Debian, XFCE4, outras distros Linux e até Windows no Android — com VNC, Termux, Termux:X11, PC virtual e nuvem.</p>
+    <p>Agora em <strong>2 abas</strong>: sistemas <strong>simples</strong> (Ubuntu, Debian, Kali, XFCE4 e Windows) e <strong>avançados</strong> (Arch Linux, com guia para iniciantes) — tudo com VNC, Termux, Termux:X11 e nuvem.</p>
   </div>
 
+  <div class="subtabs">
+    <button class="subtab active" onclick="switchSub('simples', this)">🟢 Simples</button>
+    <button class="subtab" onclick="switchSub('arch', this)">🟣 Avançados (Arch)</button>
+  </div>
+
+  <!-- ===== SUB-ABA SIMPLES ===== -->
+  <div id="sub-simples">
+
   <div class="sec-title"><span class="bar"></span>Escolha o sistema</div>
+  <p style="color:var(--text2);font-size:.85rem;margin:0 0 12px;">Todos os Linux estão juntos numa entrada só (Ubuntu, Debian, Kali, XFCE4, Fedora, Alpine…). Escolha e siga o passo a passo.</p>
   <div class="grid-distros" id="distro-grid">
-    <div class="distro-btn" data-d="kali" onclick="pickDistro('kali', this)"><div class="em">🐉</div><div class="nm">Kali Linux</div><div class="rl">Pentest (root)</div></div>
-    <div class="distro-btn" data-d="ubuntu" onclick="pickDistro('ubuntu', this)"><div class="em">🟠</div><div class="nm">Ubuntu</div><div class="rl">Desktop completo</div></div>
-    <div class="distro-btn" data-d="debian" onclick="pickDistro('debian', this)"><div class="em">🔴</div><div class="nm">Debian</div><div class="rl">Estável</div></div>
-    <div class="distro-btn" data-d="xfce" onclick="pickDistro('xfce', this)"><div class="em">🖱️</div><div class="nm">XFCE4</div><div class="rl">Leve (recomendado)</div></div>
-    <div class="distro-btn" data-d="linux" onclick="pickDistro('linux', this)"><div class="em">🐧</div><div class="nm">Linux (geral)</div><div class="rl">Arch, Fedora, Alpine</div></div>
+    <div class="distro-btn active" data-d="linux" onclick="pickDistro('linux', this)"><div class="em">🐧</div><div class="nm">Linux (todos)</div><div class="rl">Ubuntu · Debian · Kali · XFCE4</div></div>
     <div class="distro-btn" data-d="windows" onclick="pickDistro('windows', this)"><div class="em">🪟</div><div class="nm">Windows</div><div class="rl">Winlator / Nuvem</div></div>
   </div>
 
@@ -241,6 +268,326 @@
   <div id="methods-list"></div>
 
   <div class="alert alert-warn">⚠️ <strong>Aviso:</strong> Ferramentas aqui são para estudo e uso <strong>autorizado</strong>. Nunca ataque sistemas que não são seus. Rodar distros no seu próprio aparelho é totalmente legal.</div>
+  </div><!-- /sub-simples -->
+
+  <!-- ===== SUB-ABA AVANÇADOS (ARCH) ===== -->
+  <div id="sub-arch" class="hidden">
+    <div class="sec-title"><span class="bar"></span>Arch Linux — guia para iniciantes</div>
+    <div class="alert alert-info">🏔️ <strong>Arch Linux</strong> é o sistema "avançado": ele começa <strong>vazio</strong> e você monta tudo do seu jeito. É o mais poderoso e o que mais ensina — mas exige paciência. Aqui vai o guia completo, do zero, com os comandos mais usados.</div>
+
+    <div class="guide">
+
+      <div class="guide-card">
+        <div class="guide-head">🧠 1. O que é o Arch Linux?</div>
+        <div class="guide-body">
+          <p>Arch é uma <strong>distribuição Linux</strong>. Ela é chamada de "avançada" porque <strong>não vem pronta</strong>: você instala o básico e adiciona o resto aos poucos. Isso assusta no começo, mas é a melhor forma de <strong>entender como o Linux funciona de verdade</strong>.</p>
+          <p><strong>Ubuntu / Debian</strong> → já vêm com tudo instalado, são fáceis.<br><strong>Arch</strong> → vem "cru", você escolhe cada peça. É o <strong>Lego do Linux</strong>.</p>
+          <p><strong>Vantagem:</strong> está sempre atualizado e você aprende muito.<br><strong>Desvantagem:</strong> precisa ler e digitar comandos com calma.</p>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-head">📥 2. Instalar o Arch no celular (Termux)</div>
+        <div class="guide-body">
+          <span class="lbl">Passo 1 — atualize o Termux</span>
+          <code>pkg update &amp;&amp; pkg upgrade -y</code>
+          <span class="lbl">Passo 2 — instale o proot-distro</span>
+          <code>pkg install proot-distro -y</code>
+          <span class="lbl">Passo 3 — instale o Arch</span>
+          <code>proot-distro install archlinux</code>
+          <span class="lbl">Passo 4 — entre no Arch</span>
+          <code>proot-distro login archlinux</code>
+          <span class="lbl">Passo 5 — sair quando quiser</span>
+          <code>exit</code>
+          <p style="margin-top:10px;">Pronto! Você está dentro do Arch. O primeiro comando lá dentro é sempre <strong>atualizar o sistema</strong> (próximo cartão).</p>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-head">📦 3. pacman — o coração do Arch</div>
+        <div class="guide-body">
+          <p>No Arch, quem instala e remove programas é o <strong>pacman</strong>. Estes são os comandos que você mais vai usar na vida:</p>
+          <span class="lbl">Atualizar tudo (faça isso sempre ao entrar)</span>
+          <code>pacman -Syu</code>
+          <span class="lbl">Instalar um programa</span>
+          <code>pacman -S nome-do-programa</code>
+          <span class="lbl">Remover um programa</span>
+          <code>pacman -R nome-do-programa</code>
+          <span class="lbl">Remover o programa + dependências</span>
+          <code>pacman -Rs nome-do-programa</code>
+          <span class="lbl">Buscar um programa</span>
+          <code>pacman -Ss palavra-chave</code>
+          <span class="lbl">Ver informações de um pacote</span>
+          <code>pacman -Si nome-do-programa</code>
+          <span class="lbl">Listar o que já está instalado</span>
+          <code>pacman -Q</code>
+          <span class="lbl">Limpar o cache (libera espaço)</span>
+          <code>pacman -Sc</code>
+          <span class="lbl">Instalar sem pedir confirmação</span>
+          <code>pacman -S --noconfirm nome-do-programa</code>
+          <p style="margin-top:10px;"><strong>Dica:</strong> <code>-S</code> = instalar · <code>-R</code> = remover · <code>-Q</code> = consultar · <code>-Syu</code> = atualizar tudo.</p>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-head">🌟 4. AUR + yay (programas que não existem no pacman)</div>
+        <div class="guide-body">
+          <p>O <strong>AUR</strong> é uma "comunidade" com milhares de programas extras. Quem acessa o AUR é o <strong>yay</strong>. Primeiro instale o yay:</p>
+          <span class="lbl">Prepare as ferramentas de compilação</span>
+          <code>pacman -S --needed git base-devel</code>
+          <span class="lbl">Baixe e instale o yay</span>
+          <code>git clone https://aur.archlinux.org/yay.git</code>
+          <code>cd yay &amp;&amp; makepkg -si</code>
+          <span class="lbl">Agora use o yay como se fosse pacman</span>
+          <code>yay -S nome-do-programa</code>
+          <code>yay -Ss palavra-chave</code>
+          <code>yay -Syu</code>
+          <p style="margin-top:10px;">O yay faz tudo que o pacman faz <strong>e também</strong> busca no AUR. Muito prático!</p>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-head">🔧 5. systemctl — ligar e desligar serviços</div>
+        <div class="guide-body">
+          <p>Serviços são programas que ficam rodando em segundo plano (Wi-Fi, SSH, servidor web). Quem manda neles é o <strong>systemctl</strong>:</p>
+          <span class="lbl">Ver se um serviço está ativo</span>
+          <code>systemctl status nome-servico</code>
+          <span class="lbl">Iniciar / parar agora</span>
+          <code>systemctl start nome-servico</code>
+          <code>systemctl stop nome-servico</code>
+          <span class="lbl">Fazer iniciar junto com o sistema</span>
+          <code>systemctl enable nome-servico</code>
+          <code>systemctl disable nome-servico</code>
+          <span class="lbl">Listar todos os serviços rodando</span>
+          <code>systemctl list-units --type=service</code>
+          <span class="lbl">Ver os últimos erros do sistema</span>
+          <code>journalctl -xe</code>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-head">👤 6. Usuários, senha e sudo</div>
+        <div class="guide-body">
+          <span class="lbl">Criar um usuário novo</span>
+          <code>useradd -m joao</code>
+          <span class="lbl">Definir a senha dele</span>
+          <code>passwd joao</code>
+          <span class="lbl">Dar poderes de administrador (grupo wheel)</span>
+          <code>usermod -aG wheel joao</code>
+          <span class="lbl">Trocar para esse usuário</span>
+          <code>su - joao</code>
+          <span class="lbl">Quem sou eu? / ver meu id</span>
+          <code>whoami</code>
+          <code>id</code>
+          <span class="lbl">Rodar algo como administrador</span>
+          <code>sudo pacman -Syu</code>
+          <p style="margin-top:10px;"><strong>Atenção:</strong> o <code>sudo</code> dá poder total. Só use quando souber exatamente o que o comando faz.</p>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-head">📁 7. Arquivos e pastas (o básico que serve pra tudo)</div>
+        <div class="guide-body">
+          <span class="lbl">Ver onde estou</span>
+          <code>pwd</code>
+          <span class="lbl">Listar arquivos (com detalhes)</span>
+          <code>ls -la</code>
+          <span class="lbl">Entrar numa pasta / voltar</span>
+          <code>cd /etc</code>
+          <code>cd ..</code>
+          <span class="lbl">Criar pasta</span>
+          <code>mkdir minhapasta</code>
+          <span class="lbl">Copiar / mover / renomear</span>
+          <code>cp arquivo.txt /tmp/</code>
+          <code>mv antigo.txt novo.txt</code>
+          <span class="lbl">Apagar (cuidado!)</span>
+          <code>rm arquivo.txt</code>
+          <code>rm -r minhapasta</code>
+          <span class="lbl">Ver o conteúdo de um arquivo</span>
+          <code>cat arquivo.txt</code>
+          <span class="lbl">Editar um arquivo de texto</span>
+          <code>nano arquivo.txt</code>
+          <span class="lbl">Dar permissão de execução</span>
+          <code>chmod +x script.sh</code>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-head">🌐 8. Internet e Wi-Fi</div>
+        <div class="guide-body">
+          <span class="lbl">Ver meu endereço de rede</span>
+          <code>ip a</code>
+          <span class="lbl">Testar conexão</span>
+          <code>ping google.com</code>
+          <span class="lbl">Ver meu IP público</span>
+          <code>curl ifconfig.me</code>
+          <span class="lbl">Instalar o gerenciador de Wi-Fi</span>
+          <code>pacman -S networkmanager</code>
+          <code>systemctl enable --now NetworkManager</code>
+          <span class="lbl">Listar redes Wi-Fi</span>
+          <code>nmcli device wifi list</code>
+          <span class="lbl">Conectar numa rede</span>
+          <code>nmcli device wifi connect "MinhaRede" password "minhasenha"</code>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-head">🖥️ 9. Colocar um desktop gráfico (opcional)</div>
+        <div class="guide-body">
+          <p>O Arch puro é só terminal. Se quiser uma tela com janelas, instale o XFCE4 (leve):</p>
+          <code>pacman -S xorg-server xorg-xinit</code>
+          <code>pacman -S xfce4 xfce4-goodies</code>
+          <code>pacman -S lightdm lightdm-gtk-greeter</code>
+          <code>systemctl enable lightdm</code>
+          <span class="lbl">Ou iniciar direto, sem gerenciador</span>
+          <code>startxfce4</code>
+          <p style="margin-top:10px;">Para ver isso no celular, use o <strong>Termux:X11</strong> ou <strong>VNC</strong> (veja a aba Simples → métodos).</p>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-head">🆘 10. Dicas de sobrevivência no Arch</div>
+        <div class="guide-body">
+          <p>• <strong>Leia antes de apertar Enter.</strong> O pacman mostra o que vai fazer — confira.<br>
+             • <code>man comando</code> → abre o manual completo de qualquer comando.<br>
+             • <code>comando --help</code> → resumo rápido das opções.<br>
+             • <code>Ctrl + C</code> → cancela o que estiver rodando.<br>
+             • <code>clear</code> → limpa a tela.<br>
+             • <code>history</code> → mostra tudo que você digitou antes.<br>
+             • <code>Tab</code> → completa o nome do arquivo/comando sozinho (use muito!).<br>
+             • Se travar, <code>exit</code> sai e <code>proot-distro login archlinux</code> entra de novo.<br>
+             • <strong>Nunca</strong> rode <code>rm -rf /</code> — isso apaga o sistema inteiro.</p>
+        </div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-head">📚 11. Glossário rápido</div>
+        <div class="guide-body">
+          <p>• <strong>Pacote</strong> → um programa pronto para instalar.<br>
+             • <strong>Repositório</strong> → a "loja" oficial de pacotes do Arch.<br>
+             • <strong>AUR</strong> → loja da comunidade (programas extras).<br>
+             • <strong>Rolling release</strong> → atualiza continuamente, sem "versões".<br>
+             • <strong>root</strong> → o superusuário, dono de tudo.<br>
+             • <strong>sudo</strong> → executar um comando como root.<br>
+             • <strong>Terminal / shell</strong> → a tela preta onde você digita comandos.<br>
+             • <strong>Kernel</strong> → o núcleo do sistema (veja a aba <strong>🧠 O que é Kernel</strong>).</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="alert alert-warn">💡 <strong>Resumo:</strong> Arch é difícil só no começo. Depois de aprender <strong>pacman</strong>, <strong>yay</strong> e <strong>systemctl</strong>, você já consegue usar quase tudo.</div>
+  </div><!-- /sub-arch -->
+</section>
+
+<!-- ============ ABA KERNEL ============ -->
+<section id="tab-kernel" class="hidden">
+  <div class="hero">
+    <h1>🧠 O que é um Kernel?</h1>
+    <p>Explicação simples, sem termos difíceis, para quem nunca mexeu com Linux.</p>
+  </div>
+
+  <div class="guide">
+
+    <div class="guide-card">
+      <div class="guide-head">💡 A ideia em uma frase</div>
+      <div class="guide-body">
+        <p><strong>Kernel</strong> quer dizer <strong>"núcleo"</strong>. É o <strong>cérebro do computador</strong>: a peça de software que fica no meio do caminho entre os programas e o hardware (as partes físicas, como processador, memória e disco).</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🍽️ A analogia do restaurante (fácil de entender)</div>
+      <div class="guide-body">
+        <p>Imagine um restaurante:</p>
+        <p>• <strong>Você</strong> = o programa/app (faz o pedido)<br>
+           • <strong>Cozinha, fogão e geladeira</strong> = o hardware (as peças físicas)<br>
+           • <strong>O chefe de cozinha</strong> = o <strong>KERNEL</strong></p>
+        <p>Você <strong>não entra</strong> na cozinha e mexe no fogão sozinho. Você faz o pedido ao chefe, e ele organiza tudo: quem usa o fogão primeiro, quanto de ingrediente usar, quando limpar.</p>
+        <p>O kernel é esse <strong>chefe</strong>: ele recebe os pedidos dos programas e decide quem usa cada peça do computador, quando e por quanto tempo.</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">⚙️ O que o kernel faz o dia inteiro</div>
+      <div class="guide-body">
+        <p>• <strong>Processos</strong> → decide qual programa roda agora (você tem vários apps abertos e poucos núcleos de processador)<br>
+           • <strong>Memória</strong> → divide a RAM entre os programas<br>
+           • <strong>Arquivos</strong> → controla a leitura e a gravação no disco<br>
+           • <strong>Drivers</strong> → conversa com mouse, teclado, tela, Wi-Fi e câmera<br>
+           • <strong>Rede</strong> → envia e recebe dados da internet<br>
+           • <strong>Segurança</strong> → impede que um programa mexa na memória de outro</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🪜 Como tudo se encaixa (de baixo para cima)</div>
+      <div class="guide-body">
+        <div class="kernel-flow">
+          <div class="kernel-layer">🔌 <b>Hardware</b><br>processador, memória, disco, tela</div>
+          <div class="kernel-arrow">▲ ▼</div>
+          <div class="kernel-layer">🧠 <b>Kernel (Linux)</b><br>o gerente/tradutor entre tudo</div>
+          <div class="kernel-arrow">▲ ▼</div>
+          <div class="kernel-layer">🧰 <b>Programas básicos + shell</b><br>bash, ls, cp, pacman…</div>
+          <div class="kernel-arrow">▲ ▼</div>
+          <div class="kernel-layer">🖥️ <b>Ambiente gráfico + aplicativos</b><br>XFCE, navegador, jogos</div>
+          <div class="kernel-arrow">▲ ▼</div>
+          <div class="kernel-layer">👤 <b>Você</b><br>usa o computador</div>
+        </div>
+        <p>Tudo que você faz passa <strong>pelo kernel</strong>. Ele é o "meio de campo" do computador.</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">❓ Por que o Linux é um kernel?</div>
+      <div class="guide-body">
+        <p>Em <strong>1991</strong>, um estudante finlandês chamado <strong>Linus Torvalds</strong> criou um núcleo de sistema e deu o nome de <strong>Linux</strong> (de <strong>Lin</strong>us + Unix).</p>
+        <p>Esse nome, <strong>"Linux", é o nome do KERNEL</strong> — só o núcleo, não o sistema inteiro. O kernel sozinho não faz quase nada: não tem tela, não tem menu, não tem programa.</p>
+        <p>Por isso existem as <strong>distribuições</strong>: elas pegam o kernel Linux e colocam um monte de programas em volta para virar um sistema que dá para usar no dia a dia.</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🧩 Kernel ≠ Sistema ≠ Distribuição</div>
+      <div class="guide-body">
+        <p>Essa confusão é normal. Veja a diferença:</p>
+        <p>• <strong>Kernel Linux</strong> → o núcleo (o cérebro). É basicamente um arquivo.<br>
+           • <strong>Sistema operacional (GNU/Linux)</strong> → o kernel + os programas básicos.<br>
+           • <strong>Distribuição</strong> → o sistema + instalador + loja + visual. Ex: Ubuntu, Debian, Arch, Kali.</p>
+        <p>Pense assim: o kernel é o <strong>motor</strong>. A distribuição é o <strong>carro completo</strong> (motor + rodas + bancos + pintura).</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">📱 Curiosidade: seu celular já usa Linux!</div>
+      <div class="guide-body">
+        <p>O <strong>Android</strong> roda em cima do <strong>kernel Linux</strong>. Sim! Enquanto você usa o celular, o kernel Linux está trabalhando embaixo de tudo. É por isso que dá para rodar Linux no Android — ele <strong>já está lá</strong>.</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🛡️ Modo usuário × modo kernel</div>
+      <div class="guide-body">
+        <p>• <strong>Modo usuário</strong> → onde seus programas rodam, com "coleira curta": eles não podem mexer no hardware diretamente.<br>
+           • <strong>Modo kernel</strong> → só o kernel entra aqui, e tem poder total.</p>
+        <p>Quando um programa quer algo do hardware, ele <strong>pede</strong> ao kernel (isso se chama "chamada de sistema"). É assim que o computador não vira uma bagunça.</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">✅ Resumo em 5 pontos</div>
+      <div class="guide-body">
+        <p>1. Kernel = <strong>núcleo</strong>, o gerente entre os programas e o hardware.<br>
+           2. Linux é <strong>o nome do kernel</strong>, criado por Linus Torvalds em 1991.<br>
+           3. O kernel sozinho não é um sistema — as <strong>distribuições</strong> completam.<br>
+           4. Ubuntu, Debian, Arch e Kali usam <strong>o mesmo kernel Linux</strong>; só mudam os programas em volta.<br>
+           5. <strong>Android também usa Linux</strong> — por isso ele roda no seu celular.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="alert alert-warn">💡 <strong>Dica:</strong> quer ver a versão do kernel do seu aparelho? Abra o Termux e digite <strong>uname -r</strong>.</div>
 </section>
 
 <!-- ============ ABA COMANDOS ============ -->
@@ -797,15 +1144,20 @@ const CATS = [
 // LÓGICA EMULAÇÃO
 // ============================================================
 const DISTRO_METHODS = {
-  kali: ['proot','vnc','x11','nethunter','andronix','cloud'],
-  ubuntu: ['proot','vnc','x11','andronix','cloud'],
-  debian: ['proot','vnc','x11','andronix','cloud'],
-  xfce: ['vnc','x11','andronix'],
-  linux: ['proot','vnc','x11','andronix','cloud'],
+  // Todos os sistemas Linux juntos numa única entrada
+  linux: ['proot','vnc','x11','nethunter','andronix','cloud'],
   windows: ['winlator','wine','cloud','remote']
 };
 
-let currentDistro = 'kali';
+let currentDistro = 'linux';
+
+function switchSub(name, el) {
+  document.querySelectorAll('.subtab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('sub-simples').classList.toggle('hidden', name !== 'simples');
+  document.getElementById('sub-arch').classList.toggle('hidden', name !== 'arch');
+  window.scrollTo({ top: 0 });
+}
 
 function pickDistro(d, el) {
   currentDistro = d;
@@ -944,6 +1296,7 @@ function switchTab(name, el) {
   el.classList.add('active');
   document.getElementById('tab-emular').classList.toggle('hidden', name !== 'emular');
   document.getElementById('tab-comandos').classList.toggle('hidden', name !== 'comandos');
+  document.getElementById('tab-kernel').classList.toggle('hidden', name !== 'kernel');
   document.getElementById('cat-bar').style.display = name === 'comandos' ? 'flex' : 'none';
   document.getElementById('count-info').style.display = name === 'comandos' ? 'block' : 'none';
   window.scrollTo({ top: 0 });
