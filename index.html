@@ -197,6 +197,78 @@
   .kernel-layer b { color: var(--green); }
   .kernel-arrow { text-align: center; color: var(--green); font-size: 1rem; opacity: .8; }
   .alert-info { border-color: var(--green); background: #02141d; color: var(--text); }
+
+  /* ============================================================
+     RESPONSIVO — TABLET (a partir de 720px) e PC (a partir de 1100px)
+     No celular nada muda. Em telas maiores o layout se expande.
+     ============================================================ */
+
+  /* ---------- TABLET ---------- */
+  @media (min-width: 720px) {
+    header { padding: 22px 24px; }
+    .head-row, .search-box, .tabs { max-width: 940px; margin-left: auto; margin-right: auto; }
+    .tabs { justify-content: center; }
+    .tab { padding: 11px 22px; font-size: .9rem; }
+    main { max-width: 940px; padding: 24px 24px 80px; }
+    .hero { padding: 26px 0 14px; }
+    .hero h1 { font-size: 1.85rem; }
+    .hero p { font-size: .95rem; max-width: 720px; margin-left: auto; margin-right: auto; }
+    .grid-distros { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+    .distro-btn { padding: 18px 12px; }
+    .distro-btn .em { font-size: 1.8rem; }
+    .distro-btn .nm { font-size: .9rem; }
+    .cmd-name { font-size: 1.06rem; }
+    .cmd-desc { font-size: .86rem; }
+    .method-name { font-size: 1.1rem; }
+    .method-head { padding: 18px; }
+    .guide-body { font-size: .92rem; padding: 16px 18px; }
+    .guide-head { font-size: .98rem; padding: 14px 18px; }
+    .splash-inner { max-width: 620px; }
+    .splash-title { font-size: 2.6rem; }
+    .splash-logo .mark { width: 86px; height: 86px; font-size: 2.6rem; }
+    .subtabs { max-width: 560px; margin-left: auto; margin-right: auto; }
+  }
+
+  /* ---------- PC / NOTEBOOK ---------- */
+  @media (min-width: 1100px) {
+    header { padding: 26px 32px; }
+    .head-row, .search-box, .tabs { max-width: 1220px; }
+    main { max-width: 1220px; padding: 30px 32px 100px; }
+    .hero { padding: 36px 0 20px; }
+    .hero h1 { font-size: 2.25rem; }
+    .grid-distros { grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); }
+    .distro-btn { padding: 22px 14px; }
+    .distro-btn .em { font-size: 2.1rem; }
+    /* Lista de comandos em 2 colunas no PC */
+    #cmd-list { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+    #cmd-list .cmd-card { margin-bottom: 0; }
+    #cmd-list > .alert { grid-column: 1 / -1; }
+    /* Categorias quebram linha em vez de rolar */
+    .cat-bar { flex-wrap: wrap; overflow: visible; }
+    .guide { gap: 18px; }
+    .guide-body { font-size: .95rem; }
+    /* Splash maior */
+    .splash-inner { max-width: 700px; }
+    .splash-title { font-size: 3rem; }
+    .splash-logo .mark { width: 96px; height: 96px; font-size: 2.9rem; }
+    .splash-term { font-size: .9rem; min-height: 150px; }
+    .splash-bar { max-width: 380px; }
+    .copy-btn { min-width: 90px; }
+  }
+
+  /* ---------- TELAS MUITO GRANDES ---------- */
+  @media (min-width: 1500px) {
+    main, .head-row, .search-box, .tabs { max-width: 1400px; }
+  }
+
+  /* ---------- CELULAR DEITADO (baixa altura) ---------- */
+  @media (max-height: 520px) and (orientation: landscape) {
+    .splash-logo { margin-top: 14px; }
+    .splash-term { min-height: 90px; font-size: .72rem; }
+    .splash-title { font-size: 1.6rem; }
+    .splash-logo .mark { width: 52px; height: 52px; font-size: 1.6rem; margin-bottom: 8px; }
+    .splash-bar { margin-top: 14px; }
+  }
 </style>
 </head>
 <body>
