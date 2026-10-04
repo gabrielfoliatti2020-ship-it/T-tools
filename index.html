@@ -358,6 +358,226 @@
   <div id="distro-panels"></div>
 
   <div class="alert alert-warn">⚠️ <strong>Aviso:</strong> Ferramentas aqui são para estudo e uso <strong>autorizado</strong>. Nunca ataque sistemas que não são seus. Rodar distros no seu próprio aparelho é totalmente legal.</div>
+
+  <!-- ===== GUIAS: DESKTOPS GRÁFICOS ===== -->
+  <div class="sec-title" style="margin-top:28px;"><span class="bar"></span>🖥️ Baixar cada desktop gráfico (comandos completos)</div>
+  <div class="alert alert-info">Aqui estão <strong>todos os desktops gráficos</strong> que você pode instalar no celular. Cada um com os comandos completos, do zero. Quanto mais <strong>leve</strong>, melhor roda no celular. Comece pelo cartão <strong>1. Preparação</strong> e depois escolha o seu.</div>
+
+  <div class="guide">
+
+    <div class="guide-card">
+      <div class="guide-head">1️⃣ Preparação — base igual para TODOS</div>
+      <div class="guide-body">
+        <p>Faça isso <strong>uma vez</strong>. Depois você só escolhe o desktop nos cartões seguintes.</p>
+        <span class="lbl">Passo 1 — no Termux (fora da distro)</span>
+        <code>pkg update &amp;&amp; pkg upgrade -y</code>
+        <code>pkg install proot-distro -y</code>
+        <code>pkg install x11-repo -y</code>
+        <span class="lbl">Passo 2 — instale uma distro base (Ubuntu é a mais fácil)</span>
+        <code>proot-distro install ubuntu</code>
+        <span class="lbl">Passo 3 — entre na distro</span>
+        <code>proot-distro login ubuntu</code>
+        <span class="lbl">Passo 4 — já dentro do Ubuntu, atualize e instale o básico</span>
+        <code>apt update &amp;&amp; apt upgrade -y</code>
+        <code>apt install sudo nano wget curl -y</code>
+        <span class="lbl">Passo 5 — no celular, instale um app de VNC (Play Store)</span>
+        <p>Baixe <strong>VNC Viewer</strong> (RealVNC) ou <strong>bVNC</strong>. É por ele que você vai ver a tela do Linux.</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🖱️ 2. XFCE4 — leve e recomendado</div>
+      <div class="guide-body">
+        <p>O melhor equilíbrio: bonito, leve e rápido no celular. <strong>Comece por ele.</strong></p>
+        <span class="lbl">Instalar o desktop</span>
+        <code>apt install xfce4 xfce4-goodies xfce4-terminal -y</code>
+        <span class="lbl">Instalar o servidor VNC</span>
+        <code>apt install tigervnc-standalone-server tigervnc-common -y</code>
+        <span class="lbl">Criar a senha do VNC (peça 6–8 caracteres)</span>
+        <code>vncpasswd</code>
+        <span class="lbl">Criar o arquivo de inicialização</span>
+        <code>nano ~/.vnc/xstartup</code>
+        <p>Cole dentro do arquivo:</p>
+        <code>#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+exec startxfce4</code>
+        <span class="lbl">Dar permissão e iniciar</span>
+        <code>chmod +x ~/.vnc/xstartup</code>
+        <code>vncserver -geometry 1280x720 -depth 24 :1</code>
+        <span class="lbl">Parar o VNC quando quiser</span>
+        <code>vncserver -kill :1</code>
+        <p><strong>Conectar:</strong> abra o VNC Viewer → endereço <strong>localhost:5901</strong> → senha que você criou. Pronto! 🎉</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🪶 3. LXQt — mais leve que o XFCE4</div>
+      <div class="guide-body">
+        <p>Ideal para celular fraco ou com pouca memória.</p>
+        <code>apt install lxqt lxqt-config lxqt-policykit qterminal -y</code>
+        <code>apt install tigervnc-standalone-server -y</code>
+        <code>vncpasswd</code>
+        <code>nano ~/.vnc/xstartup</code>
+        <p>Cole dentro:</p>
+        <code>#!/bin/sh
+unset SESSION_MANAGER
+exec startlxqt</code>
+        <code>chmod +x ~/.vnc/xstartup</code>
+        <code>vncserver -geometry 1280x720 -depth 24 :1</code>
+        <p>Conecte no VNC Viewer em <strong>localhost:5901</strong>.</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🌿 4. MATE — médio, bem completo</div>
+      <div class="guide-body">
+        <p>Parecido com o visual clássico do Windows/Linux antigo.</p>
+        <code>apt install mate-desktop-environment mate-desktop-environment-extras -y</code>
+        <code>apt install tigervnc-standalone-server -y</code>
+        <code>vncpasswd</code>
+        <code>nano ~/.vnc/xstartup</code>
+        <p>Cole dentro:</p>
+        <code>#!/bin/sh
+unset SESSION_MANAGER
+exec mate-session</code>
+        <code>chmod +x ~/.vnc/xstartup</code>
+        <code>vncserver -geometry 1280x720 -depth 24 :1</code>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🍃 5. Cinnamon — médio-pesado, bonito</div>
+      <div class="guide-body">
+        <p>Visual moderno, parecido com Windows 10. Pede um celular melhor.</p>
+        <code>apt install cinnamon cinnamon-core nemo -y</code>
+        <code>apt install tigervnc-standalone-server -y</code>
+        <code>vncpasswd</code>
+        <code>nano ~/.vnc/xstartup</code>
+        <p>Cole dentro:</p>
+        <code>#!/bin/sh
+unset SESSION_MANAGER
+exec cinnamon-session</code>
+        <code>chmod +x ~/.vnc/xstartup</code>
+        <code>vncserver -geometry 1280x720 -depth 24 :1</code>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🔵 6. KDE Plasma — pesado, muito completo</div>
+      <div class="guide-body">
+        <p>O mais bonito e customizável, mas pesado. Use só se seu celular for potente.</p>
+        <code>apt install kde-plasma-desktop kde-standard -y</code>
+        <code>apt install tigervnc-standalone-server -y</code>
+        <code>vncpasswd</code>
+        <code>nano ~/.vnc/xstartup</code>
+        <p>Cole dentro:</p>
+        <code>#!/bin/sh
+unset SESSION_MANAGER
+exec startplasma-x11</code>
+        <code>chmod +x ~/.vnc/xstartup</code>
+        <code>vncserver -geometry 1280x720 -depth 24 :1</code>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🟣 7. GNOME — o mais pesado</div>
+      <div class="guide-body">
+        <p>Só para celulares com bastante RAM (8GB+). Fica lento em aparelhos fracos.</p>
+        <code>apt install gnome gnome-tweaks gnome-terminal -y</code>
+        <code>apt install tigervnc-standalone-server -y</code>
+        <code>vncpasswd</code>
+        <code>nano ~/.vnc/xstartup</code>
+        <p>Cole dentro:</p>
+        <code>#!/bin/sh
+unset SESSION_MANAGER
+export XDG_SESSION_TYPE=x11
+exec gnome-session</code>
+        <code>chmod +x ~/.vnc/xstartup</code>
+        <code>vncserver -geometry 1280x720 -depth 24 :1</code>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">⬛ 8. Openbox — ultra leve (quase sem interface)</div>
+      <div class="guide-body">
+        <p>Roda em qualquer celular. Só uma barra e um menu — o mínimo possível.</p>
+        <code>apt install openbox obconf menu tint2 -y</code>
+        <code>apt install tigervnc-standalone-server -y</code>
+        <code>vncpasswd</code>
+        <code>nano ~/.vnc/xstartup</code>
+        <p>Cole dentro:</p>
+        <code>#!/bin/sh
+exec openbox-session</code>
+        <code>chmod +x ~/.vnc/xstartup</code>
+        <code>vncserver -geometry 1280x720 -depth 24 :1</code>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🪟 9. i3 — ultra leve (janelas em mosaico)</div>
+      <div class="guide-body">
+        <p>Sem mouse: as janelas se organizam sozinhas em grade. Muito rápido e moderno.</p>
+        <code>apt install i3 i3status dmenu xterm -y</code>
+        <code>apt install tigervnc-standalone-server -y</code>
+        <code>vncpasswd</code>
+        <code>nano ~/.vnc/xstartup</code>
+        <p>Cole dentro:</p>
+        <code>#!/bin/sh
+exec i3</code>
+        <code>chmod +x ~/.vnc/xstartup</code>
+        <code>vncserver -geometry 1280x720 -depth 24 :1</code>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🔌 10. Termux:X11 — mais rápido que o VNC</div>
+      <div class="guide-body">
+        <p>Em vez de VNC, use o <strong>Termux:X11</strong>: a imagem fica muito mais fluida no celular.</p>
+        <span class="lbl">No Termux (fora da distro)</span>
+        <code>pkg install x11-repo -y</code>
+        <code>pkg install termux-x11-nightly -y</code>
+        <p>Instale também o <strong>APK do Termux:X11</strong> (no GitHub do termux-x11) e abra ele.</p>
+        <span class="lbl">Entre na distro compartilhando o /tmp</span>
+        <code>proot-distro login ubuntu --shared-tmp</code>
+        <span class="lbl">Ligue o servidor X11</span>
+        <code>export DISPLAY=:0</code>
+        <code>termux-x11 :0 &amp;</code>
+        <span class="lbl">Agora inicie o desktop (exemplo XFCE4)</span>
+        <code>apt install xfce4 xfce4-goodies -y</code>
+        <code>startxfce4</code>
+        <p>Abra o app Termux:X11 para ver a tela. Para KDE/LXQt troque o último comando pelo do seu desktop.</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">⚖️ 11. Qual escolher? (peso e RAM)</div>
+      <div class="guide-body">
+        <p>• <strong>Openbox / i3</strong> → 🟢 ultra leve (~100 MB) — celular fraco<br>
+           • <strong>LXQt</strong> → 🟢 leve (~200 MB) — muito recomendado<br>
+           • <strong>XFCE4</strong> → 🟢 leve (~300 MB) — <strong>melhor escolha geral</strong><br>
+           • <strong>MATE</strong> → 🟡 médio (~450 MB)<br>
+           • <strong>Cinnamon</strong> → 🟠 médio-pesado (~600 MB)<br>
+           • <strong>KDE Plasma</strong> → 🔴 pesado (~800 MB)<br>
+           • <strong>GNOME</strong> → 🔴 mais pesado (~1 GB+)</p>
+        <p><strong>Regra:</strong> se seu celular tem menos de 6 GB de RAM, fique no <strong>XFCE4</strong>, <strong>LXQt</strong>, <strong>Openbox</strong> ou <strong>i3</strong>.</p>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🆘 12. Problemas comuns e soluções</div>
+      <div class="guide-body">
+        <p>• <strong>VNC preto/vazio</strong> → o <code>xstartup</code> está errado. Confira se colou o <code>exec startxfce4</code> (ou o do seu desktop) e deu <code>chmod +x</code>.<br>
+           • <strong>Não conecta</strong> → use <strong>localhost:5901</strong> (a porta do display :1 é 5901).<br>
+           • <strong>Erro de DBus</strong> → normal no proot, ignore ou instale <code>apt install dbus-x11 -y</code>.<br>
+           • <strong>Sem som</strong> → instale <code>apt install pulseaudio -y</code>.<br>
+           • <strong>Travou</strong> → mate com <code>vncserver -kill :1</code> e suba de novo.<br>
+           • <strong>Teclado não abre</strong> → no app VNC, use o botão de teclado/ícone do canto.<br>
+           • <strong>Muito lento</strong> → troque para Termux:X11 ou um desktop mais leve.</p>
+      </div>
+    </div>
+
+  </div>
   </div><!-- /sub-simples -->
 
   <!-- ===== SUB-ABA AVANÇADOS (ARCH) ===== -->
