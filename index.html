@@ -565,7 +565,61 @@ exec i3</code>
     </div>
 
     <div class="guide-card">
-      <div class="guide-head">🆘 12. Problemas comuns e soluções</div>
+      <div class="guide-head">📦 12. Instalar apps gráficos (Firefox, VS Code, LibreOffice, VLC)</div>
+      <div class="guide-body">
+        <p>Depois que o <strong>desktop já está rodando</strong> (XFCE4, LXQt, MATE…), instale os programas <strong>dentro da distro</strong>. Abra o terminal do próprio desktop, ou o Termux logado na distro.</p>
+        <p><strong>Regra:</strong> no Ubuntu/Debian o instalador é o <code>apt</code>. Se pedir senha/permissão, use <code>sudo</code> na frente.</p>
+
+        <span class="lbl">🌐 Firefox — navegador</span>
+        <code>apt update</code>
+        <code>apt install firefox -y</code>
+        <p>No <strong>Debian</strong> o pacote tem outro nome:</p>
+        <code>apt install firefox-esr -y</code>
+        <p>Abrir: <code>firefox</code> — ou pelo menu do desktop.</p>
+
+        <span class="lbl">💻 VS Code — editor de código</span>
+        <code>apt update</code>
+        <code>apt install wget gpg -y</code>
+        <code>wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor &gt; packages.microsoft.gpg</code>
+        <code>install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg</code>
+        <code>echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" &gt; /etc/apt/sources.list.d/vscode.list</code>
+        <code>apt update</code>
+        <code>apt install code -y</code>
+        <p>Abrir: <code>code</code> — ou pelo menu (procure por “Code”).</p>
+        <p><strong>Alternativa mais leve</strong> (existe em algumas distros):</p>
+        <code>apt install code-oss -y</code>
+
+        <span class="lbl">📄 LibreOffice — Word, Excel e PowerPoint</span>
+        <code>apt install libreoffice libreoffice-gtk3 -y</code>
+        <p>Se quiser só o essencial (bem mais leve):</p>
+        <code>apt install libreoffice-writer libreoffice-calc libreoffice-impress -y</code>
+        <p>Abrir direto em cada programa:</p>
+        <code>libreoffice --writer</code>
+        <code>libreoffice --calc</code>
+        <code>libreoffice --impress</code>
+
+        <span class="lbl">🎬 VLC — player de vídeo e música</span>
+        <code>apt install vlc -y</code>
+        <p>Abrir: <code>vlc</code></p>
+
+        <span class="lbl">🔊 Áudio (necessário para VLC e vídeos)</span>
+        <code>apt install pulseaudio -y</code>
+        <code>pulseaudio --start</code>
+
+        <span class="lbl">🧹 Liberar espaço depois de instalar</span>
+        <code>apt clean</code>
+        <code>apt autoremove -y</code>
+
+        <span class="lbl">📥 Instalar tudo de uma vez (atalho)</span>
+        <code>apt install firefox-esr libreoffice libreoffice-gtk3 vlc pulseaudio -y</code>
+
+        <div class="alert alert-info" style="margin-top:12px;">💡 <strong>Dica:</strong> esses programas são pesados. Se o celular travar, use as versões leves: <strong>Falkon</strong> ou <strong>Midori</strong> (navegador), <strong>Mousepad</strong> ou <strong>Geany</strong> (editor), <strong>AbiWord</strong> + <strong>Gnumeric</strong> (escritório), <strong>mpv</strong> (vídeo).</div>
+        <div class="alert alert-warn">⚠️ <strong>Sem áudio?</strong> Rode <code>pulseaudio --start</code> antes de abrir o VLC. No Termux:X11 o som funciona melhor que no VNC.</div>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-head">🆘 13. Problemas comuns e soluções</div>
       <div class="guide-body">
         <p>• <strong>VNC preto/vazio</strong> → o <code>xstartup</code> está errado. Confira se colou o <code>exec startxfce4</code> (ou o do seu desktop) e deu <code>chmod +x</code>.<br>
            • <strong>Não conecta</strong> → use <strong>localhost:5901</strong> (a porta do display :1 é 5901).<br>
